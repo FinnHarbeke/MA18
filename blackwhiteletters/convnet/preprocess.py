@@ -4,6 +4,10 @@ import os
 
 
 def get_input(filename):
+    """
+    process .png file into pixel tensor
+        filename: path of .png file
+    """
     img = Image.open(filename)
     pxls = []
     #img.show()
@@ -12,6 +16,11 @@ def get_input(filename):
     return torch.tensor(pxls).float()
 
 def preprocess(count, every=None):
+    """
+    preprocessing for training
+        count: how many to preprocess
+        every: how often to print progress
+    """
 
     inputs = []
     targets = []
