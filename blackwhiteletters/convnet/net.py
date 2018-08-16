@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from input import preprocess
+from preprocess import preprocess
 import os
 
 class Net(nn.Module):
@@ -15,7 +15,7 @@ class Net(nn.Module):
         # an affine operation: y = Wx + b
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 26)
+        self.fc3 = nn.Linear(84, 27)
 
     def forward(self, x):
         # Max pooling over a (2, 2) window
@@ -38,7 +38,9 @@ class Net(nn.Module):
     def train(self, X, y, times, every=2000, info=False, save_path=None):
 
         print(X.size()) if info else None
-
+        if save_path != None and save_path[-1] == '/':
+            torch.save(self.state_dict(), save_path + "0")
+            
         for epoch in range(times):
 
             running_error = 0
@@ -63,7 +65,11 @@ class Net(nn.Module):
                     running_error = 0
 
                     if save_path != None:
-                        torch.save(self.state_dict(), save_path)
+                        if save_path[-1] == '/':
+                            torch.save(self.state_dict(), save_path + str(epoch + 1))
+                        else:
+                            torch.save(self.state_dict(), save_path)
+
 
 
 
@@ -79,11 +85,12 @@ class Net(nn.Module):
 
 
 def letter(arr):
-    if arr.size()[-1] != 26:
-        raise ValueError('array length gotta be 26!!')
+    if arr.size()[-1] != 27:
+        raise ValueError('array length gotta be 27!!')
 
     ind = 0
-    for i in range(26):
+    for i in range(27):
         ind = i if arr[i] > arr[ind] else ind
 
-    return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[ind]
+    abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + [" "]
+    return abc[ind]

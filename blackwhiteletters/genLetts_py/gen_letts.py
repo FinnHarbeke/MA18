@@ -3,7 +3,7 @@ import random as rd
 
 
 
-def gen_letter(size=(32, 32), info=False):
+def gen_letter(letter, size=(32, 32), info=False):
     W, H = size
 
     # new 32x32 Image with 0 or 1 as pixal value (black & white)
@@ -13,7 +13,6 @@ def gen_letter(size=(32, 32), info=False):
     draw = ImageDraw.Draw(img)
 
     # use textsize function to write in center
-    letter = rd.choice('ABCDEFGHIKLMNOPQRSTUVWXYZ')
     w, h = draw.textsize(letter, font=arial)
     # write letter
     draw.text(((W*4 - w) / 2, (H*4 - h) / 2), letter, fill=1, font=arial)
@@ -25,8 +24,13 @@ def gen_letter(size=(32, 32), info=False):
     print('letter:', letter, 'size:', arial.size//4, 'angle:', angle) if info else None
     return (img, letter)
 
-for i in range(10000, 50000):
+for char in [chr(i) for i in range(ord("A"), ord("Z")+1)] + [" "]:
     #gen_letter(info=True).resize((256, 256)).show()
-    img, let = gen_letter()
-    img.save('data/' + let + str(i) + '.png')
-    print(i)
+    print(char)
+    for i in range(2000, 2200):
+            
+        img, let = gen_letter(char)
+        if let == " ":
+            let = "SPACE"
+        img.save('new_test/' + let + str(i) + '.png')
+        print(i)

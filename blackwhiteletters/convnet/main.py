@@ -4,12 +4,12 @@ This file is for training the CNN
 
 import torch
 from net import Net
-from input import preprocess
+from preprocess import preprocess
 
 # where to save your new Nets
-save_path = 'Nets/newNet'
+save_path = 'Nets/100epochs/'
 # whether or not to train an existing NeuralNet
-load = True
+load = False
 # which Net to train further
 load_path = 'Nets/50all'
 
@@ -20,5 +20,5 @@ nn = Net()
 if load:
     nn.load_state_dict(torch.load(load_path))
 
-nn.train(*preprocess(50000, every=2000), 8, every=2000, save_path=save_path)
+nn.train(*preprocess('../genLetts_py/new_data', every=2000), 100, every=2000, save_path=save_path)
 #print(*preprocess(5), sep='\n\n')
