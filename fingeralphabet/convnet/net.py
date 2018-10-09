@@ -10,22 +10,31 @@ class Net(nn.Module):
         super(Net, self).__init__()
         # 3 input image channel, 6 output channels, 5x5 square convolution
         # kernel
-        self.conv1 = nn.Conv2d(3, 6, (32, 24))
-        self.conv2 = nn.Conv2d(6, 16, (32, 24))
+        self.conv1 = nn.Conv2d(3, 10, (32, 24), stride=2)
+        self.conv2 = nn.Conv2d(10, 25, (16, 12))
         # an affine operation: y = Wx + b
-        self.fc1 = nn.Linear(35712, 1200)
+        self.fc1 = nn.Linear(13950, 1200)
         self.fc2 = nn.Linear(1200, 150)
         self.fc3 = nn.Linear(150, 29)
+        self.loss = nn.CrossEntropyLoss()
+        self.optim = torch.optim.Adam(self.parameters(), 1e-4)
 
     def forward(self, x):
         # Max pooling over a (2, 2) window
+        print(x.shape)
         x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
+        print(x.shape)
         # If the size is a square you can only specify a single number
         x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        print(x.shape)
         x = x.view(-1, self.num_flat_features(x))
+        print(x.shape)
         x = F.relu(self.fc1(x))
+        print(x.shape)
         x = F.relu(self.fc2(x))
+        print(x.shape)
         x = self.fc3(x)
+        print(x.shape)
         return x
 
     def num_flat_features(self, x):
@@ -46,7 +55,7 @@ class Net(nn.Module):
             outputs = self(X)
             print('output:', letter(outputs)) if info else None
 
-            error = nn.MSELoss()(outputs, y)
+            error = self.loss(outputs, y)
             print('error:', float(error)) if info else None
 
             self.backprop(error)
@@ -66,12 +75,13 @@ class Net(nn.Module):
 
     def backprop(self, error, learning_rate=0.01):
         self.zero_grad()
-        error.backward(retain_graph=True)
+        error.backward(retain_graph=False)
 
         #update
 
-        for f in self.parameters():
-            f.data.sub_(f.grad.data * learning_rate)
+        # for f in self.parameters():
+            # f.data.sub_(f.grad.data * learning_rate)
+        self.optim.step()
 
 
 def letter(arr):
