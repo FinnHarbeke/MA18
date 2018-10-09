@@ -1,6 +1,6 @@
 blackwhiteletters/convnet/pytorch.py
 AE
-asl-alphabet/dataset
-asl-alphabet/kaggle_set
-asl-alphabet/videos
+fingeralphabet/dataset
+fingeralphabet/kaggle_set
+fingeralphabet/videos
 notebooks
