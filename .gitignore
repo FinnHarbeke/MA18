@@ -3,5 +3,5 @@ AE
 fingeralphabet/dataset
 fingeralphabet/kaggle_set
 fingeralphabet/videos
-fingeralphabet/convnet/Nets
+fingeralphabet/convnet/Nets/100epochs
 notebooks
