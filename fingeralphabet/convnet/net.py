@@ -16,7 +16,7 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(13950, 1200)
         self.fc2 = nn.Linear(1200, 150)
         self.fc3 = nn.Linear(150, 29)
-        self.loss = nn.CrossEntropyLoss()
+        self.loss = nn.MSELoss()
         self.optim = torch.optim.Adam(self.parameters(), 1e-4)
 
     def forward(self, x):
@@ -78,12 +78,12 @@ class Net(nn.Module):
 
 
 def letter(arr):
-    if arr.size()[-1] != 27:
-        raise ValueError('array length gotta be 27!!')
+    if arr.size()[-1] != 29:
+        raise ValueError('array length gotta be 29!!')
 
     ind = 0
-    for i in range(27):
-        ind = i if arr[i] > arr[ind] else ind
+    for i in range(29):
+        ind = i if arr[0][i] > arr[0][ind] else ind
 
-    abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + [" "]
+    abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
     return abc[ind]
