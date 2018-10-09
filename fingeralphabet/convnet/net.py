@@ -21,20 +21,13 @@ class Net(nn.Module):
 
     def forward(self, x):
         # Max pooling over a (2, 2) window
-        print(x.shape)
         x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
-        print(x.shape)
         # If the size is a square you can only specify a single number
         x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        print(x.shape)
         x = x.view(-1, self.num_flat_features(x))
-        print(x.shape)
         x = F.relu(self.fc1(x))
-        print(x.shape)
         x = F.relu(self.fc2(x))
-        print(x.shape)
         x = self.fc3(x)
-        print(x.shape)
         return x
 
     def num_flat_features(self, x):
