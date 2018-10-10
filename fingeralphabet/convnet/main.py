@@ -26,5 +26,5 @@ abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
 dataloader = DataLoader(FingerAlphabetDataset('../dataset/train'), batch_size=32, shuffle=True)
 torch.save(nn.state_dict(), save_path + '0')
 for epoch in range(100):
-    nn.train(dataloader, every_batch=1000, save_path=save_path + str(epoch + 1))
+    nn.train(dataloader, every_batch=100, save_path=save_path + str(epoch + 1))
     #print(*preprocess(5), sep='\n\n')

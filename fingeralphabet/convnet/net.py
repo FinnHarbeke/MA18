@@ -43,7 +43,7 @@ class FingeralphabetNet(nn.Module):
             :param every_batch=2000: after how many batches to report error etc.
             :param save_path=None: where to save the net, if None FingeralphabetNet is not savec during training
         """   
-
+        running_error = 0
         for i_batch, sample_batched in enumerate(dataloader):
             X = sample_batched['image_tensor']
             y = sample_batched['target_ind']
@@ -51,13 +51,15 @@ class FingeralphabetNet(nn.Module):
             outputs = self(X)
             error = self.criterion(outputs, y)
             self.backprop(error)
+            running_error += error
 
             if i_batch % every_batch == 0:
                 first = max(0, i_batch - every_batch)
-                print('Error of batches {} to {}:'.format(first, i_batch), (first+i_batch+1)/X.shape[0])
+                print('Error of batches {} to {}:'.format(first, i_batch), running_error/(X.shape[0]*(every_batch)))
                 print('Trained {} Batches of size {}!'.format(i_batch, X.shape[0]))
                 if save_path:
                         torch.save(self.state_dict(), save_path)
+                running_error = 0
 
 
 
