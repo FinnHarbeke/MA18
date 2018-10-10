@@ -86,4 +86,4 @@ def tensorBatch(ImgGen, every=2000):
             else:
                 ind = 28
         y.append(ind)
-    return torch.stack(X).float(), torch.tensor(y).long()
+    return torch.stack(X).float() / 255, torch.tensor(y).long()
