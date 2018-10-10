@@ -4,7 +4,7 @@ This file is for training the CNN
 
 import torch
 from net import Net
-from preprocess import preprocess
+from preprocess import tensorBatch, ImageGenerator
 import os
 
 # where to save your new Nets
@@ -22,12 +22,5 @@ if load:
     nn.load_state_dict(torch.load(load_path))
 
 abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
-for i in range(0, 2700, 1000):
-    l = []
-    for let in abc:
-        jmax = 700 if i == 2000 else 1000
-        for j in range(jmax):
-            l.append('../dataset/train/' + let + str(i+j) + '.jpg')
-    save = save_path+str(i//1000)+'/'
-    nn.train(*preprocess(l, every=1000), 100, every=1000, save_path=save)
+nn.train(*tensorBatch(ImageGenerator('../dataset/train')), 100, every=1000, save_path=save)
     #print(*preprocess(5), sep='\n\n')

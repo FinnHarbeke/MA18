@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from preprocess import preprocess
 import os
 
 class Net(nn.Module):
@@ -16,7 +15,7 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(13950, 1200)
         self.fc2 = nn.Linear(1200, 150)
         self.fc3 = nn.Linear(150, 29)
-        self.loss = nn.MSELoss()
+        self.criterion = nn.CrossEntropyLoss()
         self.optim = torch.optim.Adam(self.parameters(), 1e-4)
 
     def forward(self, x):
@@ -37,7 +36,7 @@ class Net(nn.Module):
             num_features *= s
         return num_features
 
-    def train(self, X, y, times, every=2000, info=False, save_path=None):
+    def train(self, X, y, times, every=2000, info=False, save_path=None, minibatches=32):
 
         print(X.shape) if info else None
         if save_path != None and save_path[-1] == '/':
@@ -45,22 +44,29 @@ class Net(nn.Module):
             
         for epoch in range(times):
 
-            outputs = self(X)
-            print('output:', letter(outputs)) if info else None
+            # minibatches
+            for i in range(0, X.shape[0], 32):
+                inputs = X[i:i+32] if i+32 < X.shape[0] else X[i:]
+                targets = y[i:i+32] if i+32 < y.shape[0] else X[i:]
 
-            error = self.loss(outputs, y)
-            print('error:', float(error)) if info else None
+                outputs = self(inputs)
+                print('output:', letter(outputs)) if info else None
 
-            self.backprop(error)
+                error = self.criterion(outputs, targets)
+                print('error:', float(error)) if info else None
 
-            error_perImg = error.item() / X.shape[0]
-            print('epoch:', epoch + 1, ',', 'error:', error_perImg/every)
+                self.backprop(error)
 
-            if save_path:
-                if save_path[-1] == '/':
-                    torch.save(self.state_dict(), save_path + str(epoch + 1))
-                else:
-                    torch.save(self.state_dict(), save_path)
+                error_perImg = error.item() / X.shape[0]
+                print('epoch:', epoch + 1, ',', 'error:', error_perImg/every)
+
+                if i % (every//32)*32 == 0:
+                    print('Trained {} in Epoch {}!'.format(i, epoch))
+                    if save_path:
+                        if save_path[-1] == '/':
+                            torch.save(self.state_dict(), save_path + str(epoch + 1))
+                        else:
+                            torch.save(self.state_dict(), save_path)
 
 
 
