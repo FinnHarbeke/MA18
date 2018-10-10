@@ -43,11 +43,11 @@ class Net(nn.Module):
             torch.save(self.state_dict(), save_path + "0")
             
         for epoch in range(times):
-
+            runningError = 0
             # minibatches
-            for i in range(0, X.shape[0], 32):
-                inputs = X[i:i+32] if i+32 < X.shape[0] else X[i:]
-                targets = y[i:i+32] if i+32 < y.shape[0] else X[i:]
+            for i in range(0, X.shape[0], minibatches):
+                inputs = X[i:i+minibatches] if i+minibatches < X.shape[0] else X[i:]
+                targets = y[i:i+minibatches] if i+minibatches < y.shape[0] else X[i:]
 
                 outputs = self(inputs)
                 print('output:', letter(outputs)) if info else None
@@ -56,11 +56,10 @@ class Net(nn.Module):
                 print('error:', float(error)) if info else None
 
                 self.backprop(error)
+                runningError
 
-                error_perImg = error.item() / X.shape[0]
-                print('epoch:', epoch + 1, ',', 'error:', error_perImg/every)
-
-                if i % (every//32)*32 == 0:
+                if i % (every//minibatches)*minibatches == 0:
+                    print('epoch:', epoch + 1, ',', 'error:', error_perImg/(every//minibatches)*minibatches)
                     print('Trained {} in Epoch {}!'.format(i, epoch))
                     if save_path:
                         if save_path[-1] == '/':
