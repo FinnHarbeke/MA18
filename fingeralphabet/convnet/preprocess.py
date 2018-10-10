@@ -1,6 +1,7 @@
 import torch
 from PIL import Image
 import os
+from torch.utils.data import Dataset
 
 # def get_input(filename):
 #     """
@@ -87,3 +88,30 @@ def tensorBatch(ImgGen, every=2000):
                 ind = 28
         y.append(ind)
     return torch.stack(X).float() / 255, torch.tensor(y).long()
+
+class FingerAlphabetDataset(Dataset):
+    def __init__(self, root_dir):
+        self.image_names = os.listdir(root_dir)
+        self.image_names.remove('.DS_Store')
+        self.root_dir = root_dir
+    
+    def __len__(self):
+        return len(self.image_names)
+
+    def __getitem__(self, ind):
+        fn = self.image_names[ind]
+        img = Image.open(os.path.join(self.root_dir, fn))
+        image_tensor = torch.tensor(img.getdata()).transpose(0, 1).view(-1, *img.size[::-1])
+        image_tensor = image_tensor.float() / 255
+        abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
+        if fn[1].isdigit():
+            target_ind = abc.index(fn[0])
+        else:
+            if fn[:3] == "SCH":
+                target_ind = 26
+            elif fn[:2] == "CH":
+                target_ind = 27
+            else:
+                target_ind = 28
+
+        return {'image_tensor': image_tensor, 'target_ind': target_ind}

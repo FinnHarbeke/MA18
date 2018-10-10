@@ -3,10 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import os
 
-class Net(nn.Module):
+class FingeralphabetNet(nn.Module):
 
     def __init__(self):
-        super(Net, self).__init__()
+        super(FingeralphabetNet, self).__init__()
         # 3 input image channel, 6 output channels, 5x5 square convolution
         # kernel
         self.conv1 = nn.Conv2d(3, 10, (32, 24), stride=2)
@@ -36,36 +36,28 @@ class Net(nn.Module):
             num_features *= s
         return num_features
 
-    def train(self, X, y, times, every=2000, info=False, save_path=None, minibatches=32):
+    def train(self, dataloader, every_batch=2000, save_path=None):
+        """
+        train function using a torch.utils.data.DataLoader()
+            :param dataloader: torch.utils.data.DataLoader()
+            :param every_batch=2000: after how many batches to report error etc.
+            :param save_path=None: where to save the net, if None FingeralphabetNet is not savec during training
+        """   
 
-        print(X.shape) if info else None
-        if save_path != None and save_path[-1] == '/':
-            torch.save(self.state_dict(), save_path + "0")
-            
-        for epoch in range(times):
-            runningError = 0
-            # minibatches
-            for i in range(0, X.shape[0], minibatches):
-                inputs = X[i:i+minibatches] if i+minibatches < X.shape[0] else X[i:]
-                targets = y[i:i+minibatches] if i+minibatches < y.shape[0] else X[i:]
+        for i_batch, sample_batched in enumerate(dataloader):
+            X = sample_batched['image_tensor']
+            y = sample_batched['target_ind']
 
-                outputs = self(inputs)
-                print('output:', letter(outputs)) if info else None
+            outputs = self(X)
+            error = self.criterion(outputs, y)
+            self.backprop(error)
 
-                error = self.criterion(outputs, targets)
-                print('error:', float(error)) if info else None
-
-                self.backprop(error)
-                runningError
-
-                if i % (every//minibatches)*minibatches == 0:
-                    print('epoch:', epoch + 1, ',', 'error:', error_perImg/(every//minibatches)*minibatches)
-                    print('Trained {} in Epoch {}!'.format(i, epoch))
-                    if save_path:
-                        if save_path[-1] == '/':
-                            torch.save(self.state_dict(), save_path + str(epoch + 1))
-                        else:
-                            torch.save(self.state_dict(), save_path)
+            if i_batch % every_batch == 0:
+                first = max(0, i_batch - every_batch)
+                print('Error of batches {} to {}:'.format(first, i_batch), (first+i_batch+1)/X.shape[0])
+                print('Trained {} Batches of size {}!'.format(i_batch, X.shape[0]))
+                if save_path:
+                        torch.save(self.state_dict(), save_path)
 
 
 
