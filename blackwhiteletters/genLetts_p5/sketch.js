@@ -44,7 +44,7 @@ class Pic {
 				this.pixels[j].push(1);
 			}
 		}
-		this.scale = floor(random() * w);
+		this.scale = floor((random() * (15/16-1/3) + 1/3) * w);
 		this.rotation = random() * 360;
 		// LETTER
 		this.letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[floor(random()*26)];

@@ -7,26 +7,36 @@ class FingeralphabetNet(nn.Module):
 
     def __init__(self):
         super(FingeralphabetNet, self).__init__()
+        self.cuda0 = torch.device('cuda:0')
         # 3 input image channel, 6 output channels, 5x5 square convolution
         # kernel
-        self.conv1 = nn.Conv2d(3, 10, (32, 24), stride=2)
-        self.conv2 = nn.Conv2d(10, 25, (16, 12))
+        self.conv1 = nn.Conv2d(  3,  32, 5, padding=2, bias=False)
+        self.batch1 = nn.BatchNorm2d(32)
+        self.conv2 = nn.Conv2d( 32,  64, 5, padding=2, bias=False)
+        self.batch2 = nn.BatchNorm2d(64)
+        self.conv3 = nn.Conv2d( 64, 128, 3, padding=1, bias=False)
+        self.batch3 = nn.BatchNorm2d(128)
+        self.conv4 = nn.Conv2d(128, 256, 3, padding=1, bias=False)
+        self.batch4 = nn.BatchNorm2d(256)
         # an affine operation: y = Wx + b
-        self.fc1 = nn.Linear(13950, 1200)
-        self.fc2 = nn.Linear(1200, 150)
-        self.fc3 = nn.Linear(150, 29)
+        self.fc1 = nn.Linear(27000, 29)
         self.criterion = nn.CrossEntropyLoss()
+        if torch.cuda.is_available():
+            self.criterion = self.criterion.to(device=self.cuda0)
         self.optim = torch.optim.Adam(self.parameters(), 1e-4)
+        
 
     def forward(self, x):
         # Max pooling over a (2, 2) window
-        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
+        if torch.cuda.is_available():
+            x = x.to(device=self.cuda0)
+        x = F.max_pool2d(F.relu(self.batch1(self.conv1(x))), 2)
         # If the size is a square you can only specify a single number
-        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = F.max_pool2d(F.relu(self.batch2(self.conv2(x))), 2)
+        x = F.max_pool2d(F.relu(self.batch3(self.conv3(x))), 2)
+        x = F.max_pool2d(F.relu(self.batch4(self.conv4(x))), 2)
         x = x.view(-1, self.num_flat_features(x))
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
         return x
 
     def num_flat_features(self, x):
@@ -42,12 +52,15 @@ class FingeralphabetNet(nn.Module):
             :param dataloader: torch.utils.data.DataLoader()
             :param every_batch=2000: after how many batches to report error etc.
             :param save_path=None: where to save the net, if None FingeralphabetNet is not savec during training
-        """   
+        """ 
+        self.training = True
         running_error = 0
         for i_batch, sample_batched in enumerate(dataloader):
             X = sample_batched['image_tensor']
             y = sample_batched['target_ind']
-
+            if torch.cuda.is_available():
+                X = X.to(device=self.cuda0)
+                y = y.to(device=self.cuda0)
             outputs = self(X)
             error = self.criterion(outputs, y)
             self.backprop(error)
@@ -74,15 +87,3 @@ class FingeralphabetNet(nn.Module):
         # for f in self.parameters():
             # f.data.sub_(f.grad.data * learning_rate)
         self.optim.step()
-
-
-def letter(arr):
-    if arr.size()[-1] != 29:
-        raise ValueError('array length gotta be 29!!')
-
-    ind = 0
-    for i in range(29):
-        ind = i if arr[0][i] > arr[0][ind] else ind
-
-    abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
-    return abc[ind]
