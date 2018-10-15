@@ -9,7 +9,7 @@ import os
 from torch.utils.data import DataLoader
 
 # where to save your new Nets
-save_path = 'Nets/100epochs/'
+save_path = 'Nets/3.try/'
 # whether or not to train an existing NeuralNet
 load = False
 # which FingeralphabetNet to train further
@@ -29,8 +29,7 @@ abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
 dataloader = DataLoader(FingeralphabetDataset('../dataset/train/train'), 
                 batch_size=32, shuffle=True, num_workers=4)
 if not load:
-    torch.save(nn.state_dict(), save_path + '0')
-for epoch in range(88, 100):
+    torch.save(nn.state_dict(), save_path + '0.pth')
+for epoch in range(30):
     print('Epoch:', epoch+1)
-    nn.train(dataloader, every_batch=100, save_path=save_path + str(epoch + 1) +'.pth')
-    #print(*preprocess(5), sep='\n\n')
+    nn.trainIt(dataloader, every_batch=1000, save_path=save_path + str(epoch + 1) +'.pth')
