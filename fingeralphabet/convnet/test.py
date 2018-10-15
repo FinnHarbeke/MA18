@@ -5,8 +5,8 @@ import os
 from torch.utils.data import DataLoader
 import pandas as pd
 
-nn_subfolder = '3.try'
-test_subfolder = '3.try'
+nn_subfolder = '4.try'
+test_subfolder = '4.try'
 
 def confusion_matrix(nn, img_dir):
     nn.train(False)
@@ -35,7 +35,7 @@ for i in range(31):
     fn = 'Nets/' + nn_subfolder + '/' + str(i) + '.pth'
     nn = FingeralphabetNet()
     if torch.cuda.is_available():
-        nn = nn.to(device=torch.device('cuda:0'))
+        nn = nn.to(device=torch.device('cuda'))
     nn.load_state_dict(torch.load(fn, map_location=lambda storage, loc: storage))
     data, acc = confusion_matrix(nn, '../dataset/test/test')
     data.to_csv('Nets/testResults/' + test_subfolder + '/ep{}.csv'.format(i))

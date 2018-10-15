@@ -7,29 +7,26 @@ class FingeralphabetNet(nn.Module):
 
     def __init__(self):
         super(FingeralphabetNet, self).__init__()
-        self.cuda0 = torch.device('cuda:0')
-        # 3 input image channel, 6 output channels, 5x5 square convolution
+        self.cuda = torch.device('cuda')
         # kernel
-        self.conv1 = nn.Conv2d(  3,  32, 5, padding=2, bias=False)
+        self.conv1 = nn.Conv2d(  3,  32, 3, padding=1, bias=False)
         self.batch1 = nn.BatchNorm2d(32)
-        self.conv2 = nn.Conv2d( 32,  64, 5, padding=2, bias=False)
+        self.conv2 = nn.Conv2d( 32,  64, 3, padding=1, bias=False)
         self.batch2 = nn.BatchNorm2d(64)
         self.conv3 = nn.Conv2d( 64, 128, 3, padding=1, bias=False)
         self.batch3 = nn.BatchNorm2d(128)
-        self.conv4 = nn.Conv2d(128, 256, 3, padding=1, bias=False)
-        self.batch4 = nn.BatchNorm2d(256)
         # an affine operation: y = Wx + b
-        self.fc1 = nn.Linear(76800, 29)
+        self.fc1 = nn.Linear(38400, 29)
         self.criterion = nn.CrossEntropyLoss()
         if torch.cuda.is_available():
-            self.criterion = self.criterion.to(device=self.cuda0)
+            self.criterion = self.criterion.to(device=self.cuda)
         self.optim = torch.optim.Adam(self.parameters(), 1e-4)
         
 
     def forward(self, x):
         # Max pooling over a (2, 2) window
         if torch.cuda.is_available():
-            x = x.to(device=self.cuda0)
+            x = x.to(device=self.cuda)
         x = self.conv1(x)
         x = F.max_pool2d(F.relu(self.batch1(x)), 2)
         # If the size is a square you can only specify a single number
@@ -37,8 +34,6 @@ class FingeralphabetNet(nn.Module):
         x = F.max_pool2d(F.relu(self.batch2(x)), 2)
         x = self.conv3(x)
         x = F.max_pool2d(F.relu(self.batch3(x)), 2)
-        x = self.conv4(x)
-        x = F.max_pool2d(F.relu(self.batch4(x)), 2)
         x = x.view(-1, self.num_flat_features(x))
         x = self.fc1(x)
         return x
@@ -63,8 +58,8 @@ class FingeralphabetNet(nn.Module):
             X = sample_batched['image_tensor']
             y = sample_batched['target_ind']
             if torch.cuda.is_available():
-                X = X.to(device=self.cuda0)
-                y = y.to(device=self.cuda0)
+                X = X.to(device=self.cuda)
+                y = y.to(device=self.cuda)
             outputs = self(X)
             error = self.criterion(outputs, y)
             self.backprop(error)

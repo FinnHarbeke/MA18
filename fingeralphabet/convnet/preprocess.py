@@ -103,6 +103,7 @@ class FingeralphabetDataset(Dataset):
     def __getitem__(self, ind):
         fn = self.image_names[ind]
         img = Image.open(os.path.join(self.root_dir, fn))
+        img = img.resize((160, 120))
         image_tensor = torch.tensor(img.getdata()).transpose(0, 1).view(-1, *img.size[::-1])
         image_tensor = image_tensor.float() / 255
         abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]

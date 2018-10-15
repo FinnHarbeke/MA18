@@ -9,17 +9,17 @@ import os
 from torch.utils.data import DataLoader
 
 # where to save your new Nets
-save_path = 'Nets/3.try/'
+save_path = 'Nets/4.try/'
 # whether or not to train an existing NeuralNet
 load = False
 # which FingeralphabetNet to train further
 load_path = "Nets/100epochs/88.pth"
 
 # initialize CNN
-cuda0 = torch.device('cuda:0')
+cuda = torch.device('cuda')
 nn = FingeralphabetNet()
 if torch.cuda.is_available():
-    nn = nn.to(device=cuda0)
+    nn = nn.to(device=cuda)
 
 # modify the CNN if needed
 if load:
