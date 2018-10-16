@@ -68,5 +68,5 @@ def webcamNN(nn):
 
 if __name__ == "__main__":
     nn = FingeralphabetNet()
-    nn.load_state_dict(torch.load("Nets/5.try/5.pth", map_location=lambda storage, loc: storage))
+    nn.load_state_dict(torch.load("Nets/8.try/8.pth", map_location=lambda storage, loc: storage))
     webcamNN(nn)

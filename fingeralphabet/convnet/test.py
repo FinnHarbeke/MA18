@@ -6,8 +6,8 @@ from torch.utils.data import DataLoader
 import torchvision as tv
 import pandas as pd
 
-nn_subfolder = '5.try'
-test_subfolder = '5.try'
+nn_subfolder = '8.try'
+test_subfolder = '8.try'
 
 def confusion_matrix(nn, img_dir):
     nn.train(False)

@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 os.system("taskset -p 0xff %d" % os.getpid())
 
 # where to save your new Nets
-save_path = 'Nets/5.try/'
+save_path = 'Nets/8.try/'
 # whether or not to train an existing NeuralNet
 load = False
 # which FingeralphabetNet to train further
@@ -27,7 +27,10 @@ if load:
     nn.load_state_dict(torch.load(load_path))
 
 dataset = tv.datasets.ImageFolder('../dataset/train2', transform=tv.transforms.Compose([
-    tv.transforms.Resize((160, 120)),
+    tv.transforms.Resize((200, 150)),
+    tv.transforms.RandomCrop((160, 120)),
+    tv.transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3),
+    tv.transforms.RandomRotation(30),
     tv.transforms.ToTensor(),
     tv.transforms.Normalize([.5]*3, [.5]*3),
 ]))
