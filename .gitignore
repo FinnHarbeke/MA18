@@ -4,4 +4,6 @@ fingeralphabet/dataset
 fingeralphabet/kaggle_set
 fingeralphabet/videos
 fingeralphabet/convnet/Nets/*
-notebooks
+!/notebooks/
+/notebooks/**
+!/notebooks/TexMA18.tex
