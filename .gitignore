@@ -7,3 +7,4 @@ fingeralphabet/convnet/Nets/*
 !/notebooks/
 /notebooks/**
 !/notebooks/TexMA18.tex
+!/notebooks/TexMA18.pdf
