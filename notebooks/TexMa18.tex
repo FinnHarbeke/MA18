@@ -11,9 +11,11 @@
 \usepackage{wrapfig}
 \usepackage{mathtools}
 \usepackage[autostyle]{csquotes}
+\usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{multicol}
 \usepackage[left=3cm, right=3cm, top=4cm]{geometry}
+\usepackage{scrextend}
 
 \newcommand*{\mypcr}{\fontfamily{pcr}\selectfont}
 \DeclareTextFontCommand{\textCode}{\mypcr}
@@ -21,7 +23,7 @@
 
 % Colors
 
-\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{dkgreen}{rgb}{0,0.7,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{lightgray}{rgb}{.9,.9,.9}
@@ -52,6 +54,8 @@
 \date{18. Oktober, 2018}
 
 \begin{document}
+\setlength\parindent{0pt}
+
 \maketitle
 \tableofcontents
 \pagebreak
@@ -65,7 +69,103 @@
 \section{Snake}
 
 \subsection{Idee und Ziel}
-Mein Ziel bei dem ersten Teil meiner Arbeit ist es, verschiedene Arten von Evolutionen zu vergleichen. Diese Evolutionen sollen eine möglichst gute Künstliche Intelligenz erschaffen, die das Game "Snake" spielt. Wichtig ist, dass bei solchen künstlichen Evolutionen das Individuum, also eine bestimmte künstliche Intelligenz, nicht selbst lernt. Es reagiert auf eine Situation immer gleich. Der eigentliche Prozess des Lernens geschieht über mehrere Generationen, wie wir es von der evolutionären Anpassung kennen. Es gibt eine Gruppe von Individuen mit DNA, die versuchen, eine bestimmte Aufgabe zu erfüllen. Im nächsten Schritt wird die Gruppe anhand ihrer Leistungen selektioniert. Und die Besseren machen Kinder, die \enquote{gute} DNA von ihren Eltern erben. Dabei sind die 3 Faktoren, die die Effizienz einer Evolution vorrangig beeinflussen die Selektion, das \enquote{Crossover} die Art des DNA-Mischens und die Mutation. Der Hauptfokus der Arbeit liegt im Vergleich der Evolutionsmechanismen. Die 3 anderen Faktoren vergleiche ich nur, damit beim Vergleich gute Bedingungen herrschen. Die eine der zwei Evolutionsprinzipien, die ich vergleiche, ist von der Natur inspiriert und die andere ist die in Machine Learning herkömmliche Methode.
+Mein Ziel bei dem ersten Teil meiner Arbeit ist es, verschiedene Arten von Evolutionen zu vergleichen. Diese Evolutionen sollen eine möglichst gute Künstliche Intelligenz erschaffen, die das Game "Snake" spielt. Wichtig ist, dass bei solchen künstlichen Evolutionen das Individuum, also eine bestimmte künstliche Intelligenz, nicht selbst lernt. Es reagiert auf eine Situation immer gleich. Der eigentliche Prozess des Lernens geschieht über mehrere Generationen, wie wir es von der evolutionären Anpassung kennen. Es gibt eine Gruppe von Schlangen mit DNA, die versuchen, das Game zu spielen und dabei einen Score kriegen. Im nächsten Schritt wird die Gruppe anhand ihrer Leistungen selektioniert. Die Besseren machen Kinder, die \enquote{gute} DNA von ihren Eltern erben. Dabei sind die 3 Faktoren, die die Effizienz einer Evolution vorrangig beeinflussen die Selektion, das \enquote{Crossover} die Art des DNA-Mischens und die Mutation. Der Hauptfokus der Arbeit liegt im Vergleich der Evolutionsmechanismen. Die 3 anderen Faktoren vergleiche ich nur, damit beim Vergleich gute Bedingungen herrschen. Die eine der zwei Evolutionsprinzipien, die ich vergleiche, ist von der Natur inspiriert und die andere ist die in Machine Learning herkömmliche Methode. Zuerst werde ich ganz allgemein Genetische Algorithmen erklären, sie sind die beliebteste Technik von evolutionären Algorithmen, also eigentlich simulierte Evolution. Mit dieser Technik kann ich die zwei Evolutionen simulieren und somit vergleichen. Dann zeige ich etwas genauer die Unterschiede zwischen den Evolutionen auf und stelle anhand dieser eine Hypothese auf, wie ich denke, dass der Vergleich ausgehen wird. Vor dem schlussendlichen Experiment erkläre ich noch zwei Dinge, die wichtig sind, aber nicht essentiell, um die Resultate zu verstehen. Ich erkläre neuronale Netzwerke, welche den Denkprozess der Schlangen verkörpern und ausführen. Dann suche ich die besten Parameter, bei welchen das Experiment unter optimalen Umständen laufen kann, doch die Methode, wie ich diese auswähle, ist weniger relevant.
+
+\subsection{Genetischer Algorithmus}
+
+Ein genetischer Algorithmus, meist Genetic Algorithm genannt, besteht aus drei essentiellen Prozessen der Evolution, welche an einer Population\footnote{Gruppe von Individuen einer Spezie, die untereinander die Möglichkeit zu Fortpflanzung haben. https://de.wikipedia.org/wiki/Population\_(Biologie), aufgerufen am 21.10.2018} ausgeübt werden. Diese sind \enquote{natürliche Selektion}, \enquote{Crossover} und \enquote{Mutation}.\\
+
+In der natürlichen Selektion muss definiert werden, was das Ziel eines genetischen Algorithmus ist, dh. es muss eine gewisse Fitness verteilt werden können, der die Leistung eines Individuums darstellt. Hier wird der grösste Unterschied zur realen Evolution ersichtlich, während sich dort eine Population konstant fortpflanzt und Nachwuchs kriegt, wird beim normalen genetischen Algorithmus eine Generation in einem Moment durch eine neue ersetzt. In der echten natürlichen Selektion ist es so, dass die, die länger überleben, tendenziell eher Kinder kriegen und somit das bessere Genmaterial häufiger wird. Beim genetischen Algorithmus ist die Wahrscheinlichkeit, ein Kind zu zeugen, schlicht jeweils proportional zur Fitness eines Individuums, die die ganze Leistung eines Individuums in einer Zahl, einem Fitness-Score, verkörpert. Das heisst einer, der zehnmal so gut war wie ein anderer hat auch eine zehnmal so grosse Wahrscheinlichkeit, bei der Zeugung des Nachwuchses mitzuwirken. Und jedes Mal, wenn diese Fortpflanzung im genetischen Algorithmus stattfindet, wird danach die ganze Elterngeneration mit der neuen Generation ausgewechselt. Zusammenfassend muss die Funktion der natürlichen Selektion, die solche Scores berechnet, wirklich aufs Ziel hinsteuern, was je nach Aufgabenstellung verschieden schwierig ist. Die natürliche Selektion ist deshalb einer der heikelsten Schritte, da sie den grössten Einfluss haben kann, bzw. ihr Einfluss am meisten zwischen positiv und negativ schwanken kann.\\
+
+Das Crossover ist der Prozess der Bildung einer Kinder-DNA anhand zwei Eltern-DNAs. Zum einen gibt es die Möglichkeit beim DNA-Strang eine, zwei oder mehr Schnittstellen zu wählen und jeweils die Informationen links einer Schnittstelle vom einen, die rechts vom anderen Elternteil zu nehmen. Diese Schnittstellen sind an zufälligen Punkten im Strang. Das sieht so aus:
+
+\begin{center}
+\includegraphics[width=0.45\textwidth]{Downloads/OnePointCrossover.png}
+\includegraphics[width=0.45\textwidth]{Downloads/TwoPointCrossover.png}\footnote{https://en.wikipedia.org/wiki/Crossover\_(genetic\_algorithm) aufgerufen am 21.10.2018}
+\end{center}
+
+Die andere verbreitete Methode, die auch die von mir verwendete sein wird, wird \enquote{uniform crossover} genannt. Bei ihr wird, wie ich schon bei der Computer-Evolution erklärt habe, bei jedem einzelnen Gen zwischen den Elternteilen entschieden. Dabei ist die Wahrscheinlichkeit in den meisten Fällen je 50\%. Das Crossover ist zwar sehr grundlegend, ihre Art aber meistens weniger entscheidend, was das Endresultat angeht.\\
+
+Der letzte sehr wichtige Schritt ist die Mutation, bei jedem neuen Nachwuchs gibt es eine gewisse Wahrscheinlichkeit, dass ein Gen zufällig mutiert. Mutieren heisst hier entweder ein Gen etwas zu verändern, oder mit einem ganz neuen Wert zu ersetzen. Die Wahrscheinlichkeit, dass das passiert, wird oft auch \enquote{mutation rate} genannt. Wenn sie zu klein ist, wird kaum neues Genmaterial geschaffen und die Population wird sehr schnell zu kleiner Diversität streben. Ausserdem, kann es möglicherweise sein, dass in einer ersten Generation schlicht nicht dass gesuchte Genmaterial vorhanden ist, dann nützt noch so viel Crossover und natürliche Selektion nichts, um an diese zu gelangen. Durch Mutation kann aber immer neue Erbinformation geschaffen werden. Andererseits ist es auch nicht wünschenswert, dass die Mutationsrate zu gross ist, weil dann alle Fortschritte der natürlichen Selektion und des Crossovers immer wieder durch all die Mutationen zunichte gemacht werden. Nämlich, weil trotz guter geerbter DNA die Kinder-DNA so sehr mutiert wird, dass sie nichts mehr taugt.\\
+
+Deshalb ist es wichtig vorallem die natürliche Selektion und die Mutationsrate im Gleichgewicht zu halten. Eine zu exponentielle Fitness-Funktion der natürlichen Selektion würde das in einer Population vorhandene Genmaterial sehr schnell dezimieren, bis nur noch alle Individuen fast die gleiche Erbinformation haben. Eine kleine Mutationsrate würde das sogar noch unterstützen. Im anderen Extrem wäre die Fitness-Funktion sehr flach und der Unterschied der Fitness eines schlechten und eines guten Individuumswäre so gering, dass es die natürliche Selektion sozusagen nicht stattfinden würde. Oder wie gesagt, könnte eine zu grosse Mutationsrate den Fortschritt zwischen zwei Generationen jedes Mal rückgängig machen. Mit diesen und mehr Faktoren und mehr werde ich im nächsten Kapitel auch noch etwas experimentieren, um eine möglichst gute Ausgangslage für den Vergleich zu schaffen.
+
+\subsubsection{Beispiel Shakespeare-Affen}
+
+Mit diesem Beispiel zeige ich die Prozesse eines genetischen Algorithmus. Es handelt sich um ein Szenario, dessen Lösung keinen Nutzen hat, aber gut den Zweck eines Beispielszenarios erfüllt.
+
+\begin{wrapfigure}[18]{l}{0.3\textwidth} 
+    \vspace{-20pt}
+        \begin{center}
+            \includegraphics[width=0.2\textwidth]{Downloads/gaprocess.png}
+            \caption{genetischer Algorithmus}
+        \end{center}
+    \vspace{-20pt}
+\end{wrapfigure} 
+
+Bei diesem Beispiel gibt es ein ganz klares Ziel: Schreibe den Satz "to be or not to be that is the question" Die Metapher handelt von ganz vielem Affen, die auf Schreibmaschinen rumtippen. Die Frage ist, wie lange es dauert, bis ein Affe zufälligerweise den Shakespeare-Satz schreibt. Um einen Satz, der 39 Zeichen lang ist, zu schreiben gibt es $ 27^{39} = 27392739 $ Möglichkeiten. Bei jedem Zeichen gibt es, 26 Möglichkeiten für die Buchstaben und noch eine für einen Abstand. Das heisst es ginge ewig, wenn die Affen immer wieder zufällig 39 Zeichen eintippten. Doch mit einem genetischen Algorithmus geht das viel schneller. Man initialisiert eine Population von beispielsweise 1000 Shakespeare-Affen, ihre DNA sind 39 Zeichen lange Listen, von anfangs zufälligen Buchstaben. In diesem Beispiel gibt es keine wirkliche Performance die ihr Können anders als die DNA widerspiegelt. Man könnte aber sagen, die Performance ist das Tippen auf der Schreibmaschine. Wichtig ist, dass ein einzelner Affe jedes Mal das Gleiche schreibt, da es in seiner DNA geschrieben steht. Dann folgt die natürliche Selektion, bzw die Verteilung von Fitness-Scores an alle Affen. Hier kann man schlicht die Anzahl richtiger Buchstaben nehmen.\\
+
+Hier ein Beispiel:\\
+
+\begin{addmargin}[2em]{0em}
+\textCode{AffeXY:\space\space"ocxjgnfx dzjoscjfgcvizdtplgwro twtodmnf"\\
+Lösung: "to be or not to be that is the question"\\
+\setlength\parindent{110pt}\indent$\uparrow$\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space\space$\uparrow$}\\
+\end{addmargin}
+
+\setlength\parindent{0pt}
+Der Score ist 2, da an der neunten und and der neuntletzten Stelle ein Abstand ist. Alle anderen Zeichen sind falsch. Es folgt die eigentliche natürliche Selektion, bei der jeweils zwei Eltern ausgewählt werden, bis die neue Generation die gleiche Grösse hat wie die alte. Die Wahrscheinlichkeit, das ein Affe ausgewählt wird, um ein Kind zu zeugen, ist proportional zu seinem Score.\\
+
+Mathematisch sieht das folgendermassen aus:\\
+
+\begin{addmargin}[2em]{0em}
+$ a = $ Liste aller Affen,\\
+$ a_x = $ ein Affe aus der Liste an Stelle $x$ (0-basiert),\\
+$ S_{a_x} = $ Score des Affens $ a_x $ und \\
+$ P_{a_x} = $ Wahrscheinlichkeit des Affens $ a_x $, für die Fortpflanzung ausgewählt zu werden\\
+
+\Large$ P_{a_x} = \frac{S_{a_x}}{\sum_{i=0}^{999} S_{a_i}} $\\
+\end{addmargin}
+
+\normalsize
+In Python:
+
+\lstset{
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=true,
+  columns=flexible,
+  basicstyle={\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve}
+}
+
+\begin{addmargin}[2em]{0em}
+\begin{lstlisting}
+def probability(x):
+    s = sum([monkey.fitness for monkey in monkeys])
+    return monkeys[x]/s
+\end{lstlisting}
+\end{addmargin}
+
+Dann folgt das Crossover von jeweils zwei selektierten Eltern. Wichtig! Hier gibt es keine Geschlechter. Hier wird uniform crossover benutzt:\\
+
+\begin{addmargin}[2em]{0em}
+\textCode{parent1: "\textcolor{red}{rbnfemtfqgrbe\space\space ygdhuxywvyjvqecizhhfwwdz}"\\
+parent2: "\textcolor{dkgreen}{ankixhhognzqxfverrh fvq caqgnidbrdy izo}"\\
+child:\space\space"\color{dkgreen}ank\textcolor{red}{f}xhh\textcolor{red}{fq}nzqxf\space\textcolor{red}{y}rrh\textcolor{red}{uxy}q \textcolor{red}{y}a\textcolor{red}{vq}nidb\textcolor{red}{hh}y\textcolor{red}{ww}zo\color{black}"}\\
+\end{addmargin}
+
+Zum Schluss wird bei allen entstandenen neuen Affen noch mutiert, was in der echten Welt etwas grausam tönt, ist ganz harmlos. Bei einer Wahrscheinlichkeit von beispielsweise 1\% wird ein Buchstabe in der DNA zufällig ausgewechselt, dh in unserem Beispiel würde es sogar nur bei 2 von 5 Affen eine Mutation geben.\\
+
+\textCode{child before mutation: "ankfxhhfqnzqxf yrrhuxyq yavqnidbhhywwzo"\\
+          child after mutation: \ "ankfxhhfqnzqxf yrrhuxyq \textcolor{red}{p}avqnidbhhywwzo"\\}
+
+Somit entsteht eine neue Generation, der wieder verschiedene Scores zugeteilt werden und die dann eine 3. Generation macht. So geht es weiter und weiter. Bei diesem Beispiel kann man aufhören sobald die Lösung gefunden worden ist, da es eine richtige Lösung gibt, sonst macht man es einfach bis zufriedenstellende Resultate aufkommen.
 
 \subsection{Natur-Evolution und Computer-Evolution}
 Die Begriffe Natur- und Computer-Evolution sind keine allgemein bekannte Fachbegriffe, sondern zwei von mir gewählte Ausdrücke. In der Folge verwende ich diese beiden Ausdrücke für zwei verschiedene Mechanismen der Evolution. Wie das Wort \enquote{Natur-Evolution} impliziert, habe ich diese Methode von Vorgängen unserer Natur abgeschaut und werde sie anhand der menschlichen Fortpflanzung erklären. Der Mensch hat 46 Chromosomen, 23 von der Mutter und 23 vom Vater, das heisst er hat jedes Chromosom doppelt. Bei jedem einzelnen Gen setzt sich das stärkere durch, es ist das dominante. Unabhängig davon, ob bei einem Chromosom mehrheitlich die Gene des Vaters oder der Mutter benutzt wurden, ist die Chance beider Chromosome aller 23 Paare gleich gross, ans Kind weitergegeben zu werden. 
@@ -75,8 +175,6 @@ Bei der \enquote{Computer-Evolution} hingegen wird bei der \enquote{Zeugung} jed
 % Es gilt festzuhalten, dass dann beim Kind wirklich nur 2 Gene möglich sind. Bei der \enquote{Natur-Evolution} gibt es 4 Möglichkeiten von Zweierpaaren, bei denen jeweils das dominante gewinnt, dh maximal 3 verschiedene Gene, die ein Kind schlussendlich benutzen könnte. 
 
 Im Folgenden erkläre ich diese Prinzipien im Detail mit einer bildlichen Darstellung.
-
-\pagebreak
 
 \subsubsection{Beispiele}
 
@@ -152,20 +250,17 @@ Die Computer-Evolution hat ihre Anzahl an neuen DNA-Kombinationen im Gegensatz z
 Daraus folgt, dass diese Kombinationsmöglichkeiten bei der Computer-Evolution von der Anzahl Gene abhängt und bei der Natur-Evolution von der Anzahl Chromosome. Die Kombinationsmöglichkeiten dieser beiden Mechanismen können mit den folgenden zwei Formeln ausgedrückt werden:
 \bigskip
 
-\(k=\#Kombinationen\)
+$k=\#Kombinationen$\\
+$c=\#Chromosome$\\
+$g=\#Gene$\\
 
-\(c=\#Chromosome\)
+\large
+$k_{Natur-Evolution}=4^c$\\
 
-\(g=\#Gene\)
-\bigskip
+$k_{Computer-Evolution}=2^g$\\
 
-\(k_{Natur-Evolution}=4^c\)
-\bigskip
-
-\(k_{Computer-Evolution}=2^g\)
-\bigskip
-
-Folglich gibt es bei uns Menschen \(4^{23}\) verschiedene Kombinationen, die ein einzelnes Paar zeugen kann. Zu beachten ist dabei, dass sehr viele unserer Gene (fast) gleich sind und somit Überschneidungen vorkommen. Zudem wird die sichtbare Anzahl nochmals verkleinert, weil bei jeder Kombination jeweils das stärkere Gen benutzt wird und somit die dominante, also erkennbare Erbinformation weniger divers sein kann, als die geerbte DNA. Jedoch werden diese Informationen von dem Moment der Zeugung an von äusseren Faktoren beeinflusst, was zu (beinahe) unendlicher Diversität führt. Bei simulierter Evolution ist das nicht der Fall.
+\normalsize
+Folglich gibt es bei uns Menschen $4^{23}$ verschiedene Kombinationen, die ein einzelnes Paar zeugen kann. Zu beachten ist dabei, dass sehr viele unserer Gene (fast) gleich sind und somit Überschneidungen vorkommen. Zudem wird die sichtbare Anzahl nochmals verkleinert, weil bei jeder Kombination jeweils das stärkere Gen benutzt wird und somit die dominante, also erkennbare Erbinformation weniger divers sein kann, als die geerbte DNA. Jedoch werden diese Informationen von dem Moment der Zeugung an von äusseren Faktoren beeinflusst, was zu (beinahe) unendlicher Diversität führt. Bei simulierter Evolution ist das nicht der Fall.
 
 \subsubsection{Hypothese}
 
@@ -173,95 +268,10 @@ Wenn es mehr als doppelt so viele Gene wie Chromosome hat, was üblich ist, gibt
 
 Dies wäre eine befriedigende Bekräftigung der Evolutionsprinzipien unserer Natur. Dazu ist zu ergänzen, dass die Mechanismen der Computer-Evolution in der Natur gar nicht funktionieren würden, da die DNA eines Kindes nicht aus zwei Eltern-DNAs zusammengestellt werden kann wie mit einem Baukasten. Denn Spermium wie auch Eizelle müssen jeweils eine vollständige DNA beinhalten. Würden sie, unwissend welche Bauteile der Andere mitbringt, nur einzelne Bausteine mitbringen, könnten Leerstellen und ungewollte zweifache Ausführungen eines Elements vorkommen.
 
-\subsection{Genetischer Algorithmus}
-
-Ein genetischer Algorithmus, meist Genetic Algorithm genannt, besteht aus drei essentiellen Prozessen der Evolution, welche an einer Population\footnote{Gruppe von Individuen einer Spezie, die untereinander die Möglichkeit zu Fortpflanzung haben. https://de.wikipedia.org/wiki/Population\_(Biologie), aufgerufen am 21.10.2018} ausgeübt werden. Diese sind \enquote{natürliche Selektion}, \enquote{Crossover} und \enquote{Mutation}. 
-
-\bigskip
-Die natürliche Selektion ist einer der heikelsten Schritte, da sie den grössten Einfluss haben kann, bzw. ihr Einfluss am meisten zwischen positiv und negativ schwanken kann. Denn in der natürlichen Selektion muss definiert werden, was das Ziel eines genetischen Algorithmus ist, dh. es muss eine gewisse Fitness verteilt werden können, der die Leistung eines Individuums darstellt. Hier wird der grösste Unterschied zur realen Evolution ersichtlich, während sich dort eine Population konstant fortpflanzt und Nachwuchs kriegt, wird beim normalen genetischen Algorithmus eine Generation in einem Moment durch eine neue ersetzt. In der echten natürlichen Selektion ist es so, dass die, die länger leben, tendenziell mehr Kinder kriegen und somit das bessere Genmaterial häufiger wird. Beim normalen Genetischen Algorithmus versucht jedoch jedes Individuum die Aufgabe zu bewältigen und die Wahrscheinlichkeit, ein Kind zu zeugen, ist jeweils proportional zur Fitness eines Individuums. Das heisst einer, der zehnmal so gut war wie ein anderer hat auch eine zehnmal so grosse Wahrscheinlichkeit, bei der Zeugung des Nachwuchses mitzuwirken. \textit{Und jedes Mal, wenn diese Fortpflanzung im genetischen Algorithmus stattfindet, wird danach die ganze Elterngeneration mit der neuen Generation ausgewechselt.} Zusammenfassend muss die Funktion der natürlichen Selektion, die solche Scores berechnet, wirklich aufs Ziel hinsteuern, was je nach Aufgabenstellung verschieden schwierig ist.
-
-Das Crossover hingegen ist zwar sehr grundlegend, ihre Art aber meistens weniger entscheidend, was das Endresultat angeht. Zum einen gibt es die Möglichkeit beim DNA-strang eine, zwei oder mehr Schnittstellen zu wählen und jeweils die Informationen links einer Schnittstelle vom einen, die rechts vom anderen Elternteil zu nehmen. Diese Schnittstellen sind an zufälligen Punkten im Strang
-
-\begin{center}
-\includegraphics[width=0.45\textwidth]{Downloads/OnePointCrossover.png}
-\includegraphics[width=0.45\textwidth]{Downloads/TwoPointCrossover.png}\footnote{https://en.wikipedia.org/wiki/Crossover\_(genetic\_algorithm) aufgerufen am 21.10.2018}
-\end{center}
-
-Die andere verbreitete Methode, die auch die von mir verwendete sein wird, wird uniform crossover genannt. Bei ihr wird, wie ich schon bei der Computer-Evolution erklärt habe, bei jedem einzelnen Gen zwischen den Elternteilen entschieden. Dabei ist die Wahrscheinlichkeit in den meisten Fällen je 50\%.
-
-Der letzte sehr wichtige Schritt ist die Mutation, bei jedem neuen Nachwuchs gibt es eine gewisse Wahrscheinlichkeit, dass ein Gen zufällig mutiert. Diese Wahrscheinlichkeit wird oft auch mutation rate genannt. Wenn sie zu klein ist, wird kaum neues Genmaterial geschaffen und die Population wird sehr schnell zu kleiner Diversität streben. Ausserdem, kann es möglicherweise sein, dass in einer ersten Generation schlicht nicht dass gesuchte Genmaterial vorhanden ist, dann nützt noch so viel Crossover und natürliche Selektion nichts, um an diese zu gelangen. Durch Mutation kann aber immer neue Erbinformation geschaffen werden. Andererseits ist es auch nicht wünschenswert, dass die Mutationsrate zu gross ist, weil dann alle Fortschritte der natürlichen Selektion und des Crossovers immer wieder durch all die Mutationen zunichte gemacht werden.
-
-Deshalb ist es wichtig vorallem die natürliche Selektion und die Mutationsrate im Gleichgewicht zu halten. Eine zu exponentielle Score-Funktion der natürlichen Selektion würde das in einer Population vorhandene Genmaterial sehr schnell dezimieren, bis nur noch alle Individuen fast die gleiche Erbinformation haben. Eine kleine Mutationsrate würde das sogar noch unterstützen. Im anderen Extrem wäre die Score-Funktion sehr flach und der Unterschied der Scores eines schlechten und eines guten Individuumswäre so gering, dass es die natürliche Selektion sozusagen nicht stattfinden würde. Oder wie gesagt, könnte eine zu grosse Mutationsrate den Fortschritt zwischen zwei Generationen jedes Mal rückgängig machen. Mit diesen und mehr Faktoren und mehr werde ich im nächsten Kapitel auch noch etwas experimentieren, um eine möglichst gute,Ausgangslage für den Vergleich zu schaffen.
-
-\pagebreak
-\subsubsection{Beispiel Shakespeare-Affen}
-
-\begin{wrapfigure}[18]{l}{0.3\textwidth} 
-    \vspace{-20pt}
-        \begin{center}
-            \includegraphics[width=0.2\textwidth]{Downloads/gaprocess.png}
-            \caption{genetischer Algorithmus}
-        \end{center}
-    \vspace{-20pt}
-\end{wrapfigure} 
-
-Bei diesem Beispiel gibt es ein ganz klares Ziel: Schreibe den Satz "to be or not to be that is the question" Die Metapher handelt von ganz vielem Affen, die auf Schreibmaschinen rumtippen. Die Frage ist, wie lange es dauert, bis ein Affe zufälligerweise den Shakespeare-Satz schreibt. Um einen Satz, der 39 Zeichen lang ist, zu schreiben gibt es $ 27^{39} = 27392739 $ Möglichkeiten. Bei jedem Zeichen gibt es, 26 Möglichkeiten für die Buchstaben und noch eine für einen Abstand. Das heisst es ginge ewig. Doch mit einem genetischen Algorithmus geht das viel schneller. Man initialisiert eine Population von beispielsweise 1000 Shakespeare-Affen, ihre DNA sind 39 Zeichen lange Listen. In diesem Beispiel gibt es keine wirkliche Performance die ihr Können anders als die DNA widerspiegelt. Man könnte aber sagen, die Performance ist das Tippen auf der Schreibmaschine. Wichtig ist, dass ein einzelner Affe jedes Mal das Gleiche schreiben würde, da es in seiner DNA geschrieben steht. Dann folgt die natürliche Selektion, bzw die Verteilung von Scores an alle Affen. Hier könnte man schlicht die Anzahl richtiger Buchstaben nehmen.
-
-\bigskip
-Hier ein Beispiel:\\
-AffeXY: "ocxjgnfx dzjoscjfgcvizdtplgwro twtodmnf"\\
-Lösung: "to be or not to be that is the question"
-
-Der Score ist 2, da an der neunten und and der neuntletzten Stelle ein Abstand ist. Alle anderen Zeichen sind falsch. Es folgt die eigentliche natürliche Selektion, bei der jeweils zwei Eltern ausgewählt werden, bis die neue Generation die gleiche Grösse hat wie die alte. Die Wahrscheinlichkeit, das ein Affe ausgewählt wird, um ein Kind zu zeugen, ist proportional zu seinem Score. 
-
-Mathematisch sieht das folgendermassen aus:\\
-
-$ a = $ Liste aller Affen, $ a_x = $ ein Affe aus der Liste an Stelle x (0-basiert),
-
-$ S_{a_x} = $ Score des Affens $ a_x $ und 
-
-$ P_{a_x} = $ Wahrscheinlichkeit des Affens $ a_x $, für die Fortpflanzung ausgewählt zu werden
-
-$ P_{a_x} = \frac{S_{a_x}}{\sum_{i=0}^{999} S_{a_i}} $\\
-
-In Python:
-
-\lstset{
-  language=Python,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=true,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve}
-}
-
-\begin{lstlisting}
-def probability(x):
-    s = sum([monkey.score for monkey in monkeys])
-    return monkeys[x]/s
-\end{lstlisting}
-
-Dann folgt das Crossover von jeweils zwei selektierten Geschlechtern. 
-Wichtig! Hier gibt es keine Geschlechter. Hier wird uniform crossover benutzt:\\
-\textCode{parent1: "\textcolor{red}{rbnfemtfqgrbe\space\space ygdhuxywvyjvqecizhhfwwdz}"\\
-parent2: "\textcolor{green}{ankixhhognzqxfverrh fvq caqgnidbrdy izo}"\\
-child:\space\space"\color{green}ank\textcolor{red}{f}xhh\textcolor{red}{fq}nzqxf\space\textcolor{red}{y}rrh\textcolor{red}{uxy}q \textcolor{red}{y}a\textcolor{red}{vq}nidb\textcolor{red}{hh}y\textcolor{red}{ww}zo\color{black}"}
-
-
-Zum Schluss wird bei allen entstandenen neuen Affen noch mutiert, was in der echten Welt etwas grausam tönt, ist ganz harmlos. Bei einer Wahrscheinlichkeit von beispielsweise 1\% wird ein Buchstabe in der DNA zufällig ausgewechselt, dh in unserem Beispiel würde es sogar nur bei 2 von 5 Affen eine Mutation geben.\\
-child before mutation: "ankfxhhfqnzqxf yrrhuxyq yavqnidbhhywwzo"\\
-child after mutation: "ankfxhhfqnzqxf yrrhuxyq \textcolor{red}{p}avqnidbhhywwzo"
-
-Somit entsteht eine neue Generation, der wieder verschiedene Scores zugeteilt werden und die dann eine 3. Generation macht. So geht es weiter und weiter. Bei diesem Beispiel kann man aufhören sobald die Lösung gefunden worden ist, da es eine richtige Lösung gibt, sonst macht man es einfach bis zufriedenstellende Resultate aufkommen.
 
 \subsection{Neuronale Netzwerke}
 
-Neuronale Netzwerke sind etwas sehr sehr Grundlegendes in der Welt von Machine Learning. Es ist eine Methode um mit einer gewissen Anzahl Inputs (Liste von Zahlen) zu rechnen und daraus eine gewisse Anzahl von Outputs zu machen. Ein einfaches Beispiel wäre, anhand von Länge und Breite der Blütenblätter die Blumensorte zu bestimmen. So ein Neuronales Netzwerk besteht jeweils aus mehreren Layers, die alle aus einigen Neuronen bestehen. Die Neuronen einer Layer sind durch Synapsen mit den Neuronen der nächsten Layer verbunden. Dies ist von unserem Gehirn inspiriert, welches auch mit Neuronen, die über Synapsen verbunden sind, funktioniert, nur ohne Layers und viel komplizierter.
+Neuronale Netzwerke sind etwas sehr sehr Grundlegendes in der Welt von Machine Learning. Es ist eine Methode um mit einer gewissen Anzahl Inputs (Liste von Zahlen) zu rechnen und daraus eine gewisse Anzahl von Outputs zu machen. Ein einfaches Beispiel wäre, anhand von Länge und Breite der Blütenblätter die Blumensorte zu bestimmen. So ein Neuronales Netzwerk besteht jeweils aus mehreren Layers, die alle aus einigen Neuronen bestehen. Die Neuronen einer Layer sind durch Synapsen mit den Neuronen der nächsten Layer verbunden. Dies ist von unserem Gehirn inspiriert, welches auch mit Neuronen, die über Synapsen verbunden sind, funktioniert, nur ohne Layers und viel komplizierter.\\
 
 Ersichtlicher wird das mit zwei Beispielen von Neuronalen Netzwerken, welche Gleichheit erkennen sollten. Sie haben zwei Inputs, je eine 1 oder eine 0 und haben die Aufgabe, 1 ausrechnen, wenn beide Inputs gleich sind und 0 wenn sie verschieden sind. Zuerst zeige ich ein Beispiel eines sehr gut funktionierenden Netzwerks dann eines mit zufällig initialistierten Werten. Anhand dieser beiden Beispiele werde ich die inneren Prozesse eines Neuronalen Netzwerkes erklären. 
 
@@ -283,32 +293,21 @@ Jedes Input-Neuron hat eine Verbindung zu allen Neuronen der nächsten Layer, di
 
 
 
-Das ist der Rechenweg für das Zwischenresultat des oberen Hidden-Layer-Neuron 
-des zufällig initialisierten Netzwerks beim Inputs-Vektor
-$ \left(\begin{array}{cc} 1 & 1\end{array}\right) $:\\
-\\
+Das ist der Rechenweg für das Zwischenresultat des oberen Hidden-Layer-Neuron des zufällig initialisierten Netzwerks beim Inputs-Vektor $\left(\begin{array}{cc} 1 & 1\end{array}\right) $:\\
+
 $ ReLU(1 * -0.0053 + 1 * 0.6943 + 0.4179) = 1.1069 $\\
 
 Doch für das ganze Netzwerk schreibt man lieber in Matrix-Multiplikation:\\
-\\
-$ ReLU(input * weights_{ih} + bias_h) = hiddenOutput $\\
-$
-ReLU(
-\left(\begin{array}{cc} 1 & 1\end{array}\right) * 
-\left(\begin{array}{cc} -0.0053 & 0.4379\\ 0.6943 & 0.9846\end{array}\right) + 
-\left(\begin{array}{cc} 0.4179 & -0.6687\end{array}\right)) = 
-\left(\begin{array}{cc} 1.1122 & 0.3159\end{array}\right)
-$\\
-$ ReLU(hiddenOutput * weights_{ho} + bias_o) = Output $\\
-$
-ReLU(
-\left(\begin{array}{cc} 1.1122 & 0.3159\end{array}\right) * 
-\left(\begin{array}{cc} 1.0212\\ 0.8301\end{array}\right) + 
-\left(\begin{array}{cc} -0.5795\end{array}\right)) 
-= \left(\begin{array}{cc}  1.1766\end{array}\right)
-$
 
-Sehr spannend ist es ausserdem, wenn man den Denkmechanismus solcher Netzwerke genauer anschaut. Meistens ist es äusserst komplex und nicht zu verstehen, doch beim *and*-Problem kann man die einzelnen Schritte erkennen. Wenn man sich das funktionierende Netzwerk anschaut, sieht man, das obere Hidden-Neuron gibt nur einen positiven Output, wenn der Input $ \left(\begin{array}{cc} 1 & 1\end{array}\right) $ ist. Das heisst, es hält sozusagen Ausschau nach dem 1 1 Muster. Das untere Hidden-Neuron reagiert analog nur auf den $ \left(\begin{array}{cc} 0 & 0\end{array}\right) $ Input, sonst ist es 0. Der Outputput zeigt dann lediglich an, ob eins der Hidden-Neuronen ein Signal gibt. So simpel ist das *and*-Problem gelöst.
+$ ReLU(input * weights_{ih} + bias_h) = hiddenOutput $\\
+
+$ReLU(\left(\begin{array}{cc} 1 & 1\end{array}\right) * \left(\begin{array}{cc} -0.0053 & 0.4379\\ 0.6943 & 0.9846\end{array}\right) + \left(\begin{array}{cc} 0.4179 & -0.6687\end{array}\right)) = \left(\begin{array}{cc} 1.1122 & 0.3159\end{array}\right)$\\
+
+$ ReLU(hiddenOutput * weights_{ho} + bias_o) = Output $\\
+
+$ReLU(\left(\begin{array}{cc} 1.1122 & 0.3159\end{array}\right) * \left(\begin{array}{cc} 1.0212\\ 0.8301\end{array}\right) + \left(\begin{array}{cc} -0.5795\end{array}\right)) = \left(\begin{array}{cc}  1.1766\end{array}\right)$\\
+
+Sehr spannend ist es ausserdem, wenn man den Denkmechanismus solcher Netzwerke genauer anschaut. Meistens ist es äusserst komplex und nicht zu verstehen, doch beim *and*-Problem kann man die einzelnen Schritte erkennen. Wenn man sich das funktionierende Netzwerk anschaut, sieht man, das obere Hidden-Neuron gibt nur einen positiven Output, wenn der Input $ \left(\begin{array}{cc} 1 & 1\end{array}\right) $ ist. Das heisst, es hält sozusagen Ausschau nach dem 1 1 Muster. Das untere Hidden-Neuron reagiert analog nur auf den $ \left(\begin{array}{cc} 0 & 0\end{array}\right) $ Input, sonst ist es 0. Der Outputput zeigt dann lediglich an, ob eins der Hidden-Neuronen ein Signal gibt. So simpel ist das *and*-Problem gelöst.\\
 
 Neuronale Netzwerke sind für Machine Learning deshalb so wichtig, weil sehr, sehr komplexe Verhältnisse zwischen Input-Vektoren und Output-Vektoren verkörpern können. Denn die Anzahl der Layers wie auch die Anzahl Neuronen in den Layers können unglaubliche Dimensionen annehmen. Das passiert dann vorallem im Bereich von Machine Learning, der Deep Learning genannt, der heisst so, weil die Netzwerke so "tief" sind, dh unzählige grosse Hidden-Layers haben. Deep Neural Networks, werden zum Beispiel bei der Bildererkennung benutzt. Doch zu beachten ist, dass Neuronale Netzwerke allein noch nichts mit dem Prozess des Lernens zu tun haben. Sie sind lediglich komplizierte Funktionen. Um zu lernen, können dann verschiedene Techniken benutzt werden, die Gewichte und die Biases gezielt verändern.
 
@@ -317,6 +316,7 @@ Neuronale Netzwerke sind für Machine Learning deshalb so wichtig, weil sehr, se
 Dieses Kapitel geht darum wie ich mein Snake-Projekt aufgebaut und so weit programmiert habe bis es für den schlussendlichen Vergleich bereit war. Es ist das einzige, in welchem ich etwas genauer auf meinen Code eingehe. Zuerst erläutere ich einzelne Teile der Programmierung des eigentlichen Games, dann schauen wir uns das Neuronale Netzwerk der Schlangen an, welche selbst spielen, dh die, die dann Bestandteil des genetischen Algorithmus sein werden. Anschliessend, zeige ich, wie einige der Funktionen des genetischen Algorithmus in JavaScript, einer webbasierten Programmiersprache aussehen. Zum Schluss analysiere ich noch verschiedene Einstellungen, wie die Mutationsrate und verschiedene Arten der natürlichen Selektion, um das Projekt für den Vergleich der Natur- und der Computer-Evolution mäglichst schön vorzubereiten.
 
 \subsubsection{Code Beispiele}
+
 Zuallererst musste ich das Spiel Snake programmieren. Um diesen Prozess zu veranschaulichen, zeige ich am besten die \textCode{action()} Funktion einer Schlange, welche aber noch nicht "intelligent"ist, und erkläre ihn. Text nach \enquote{\textCode{//}} und zwischen \enquote{\textCode{/*}} und \enquote{\textCode{*/}} ist jeweils ein Kommentar, dh er wird nicht ausgeführt:
 
 \lstset{
@@ -409,21 +409,17 @@ class Snake {
 }
 \end{lstlisting}
 
-\begin{wrapfigure}[10]{l}{0.4\textwidth} 
-    \vspace{-20pt}
-        \begin{center}
-            \includegraphics[width=0.4\textwidth]{Downloads/snake.png}
-            \caption{\textCode{show(x, y, w, h)} der Klasse \textCode{Snake}}
-        \end{center}
-    \vspace{-35pt}
-\end{wrapfigure} 
-
 Damit man das auch noch bildlich sieht, ist hier ein Resultat der \textCode{this.show(x, y, w, h)} Funktion:\\
+
+\begin{figure}[h] 
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{Downloads/snake.png}
+        \caption{\textCode{show(x, y, w, h)} der Klasse \textCode{Snake}}
+    \end{center}
+\end{figure}
 
 Doch das ist nur eine Schlange, die von uns Menschen gespielt werden kann. Wie sieht es aus, wenn man der Schlange die Kontrolle überlässt? Dafür müssen wir uns die \textCode{think()} Funktion der \textCode{SmartSnake()} Klasse, welche eine Unterklasse der \textCode{Snake} Klasse ist, genauer anschauen. Doch für das müssen wir zuerst noch andere Mechanismen der SmartSnake kennen.
 
-
-\vspace{6 em}
 \subsubsection{Struktur des neuronalen Netzwerks}
 
 Die SmartSnake besitzt als DNA die Werte eines Neuronalen Netzwerks. Dieses Netzwerk hat die Struktur (24, 16, 4), dh sie hat 24 Inputs, eine Hidden-Layer mit 16 Neuronen und 4 Outputs. Die vier Outputs sind Werte, die jeweils den Drang der Schlange, in eine bestimmte Richtung zu gehen, numerisch darstellen. Und zwar in folgender Reihen folge: $ \left(\begin{array}{cccc} up & right & down & left\end{array}\right) $. Wäre der Output also $ \left(\begin{array}{cccc} 1 & 0 & -1 & 2\end{array}\right) $, würde die Schlange somit ausrechnen, am liebsten in die letzte Richtung, also nach links, zu gehen. Die 24 Inputs bestehen aus 3 Achtern-Sets, jedes Achter-Set besteht aus acht Richtungen, in welche die Schlange sehen kann, alle 45\degree. Sie sieht Wandblöcke, Schlangenblöcke und ob eine Frucht zu sehen ist. Diesen drei "Sichtarten" entsprechen die Achter-Sets. Bei der Wand- und der Schlangensicht ist der Input jeweils 1 / Distanz, sodass die nächsten Wände und Schlangenblöcke die grössten Werte abgeben. Bei der Fruchtsicht ist der Input immer 0, ausser eine Frucht ist in Sicht, dann ist er 1. Die Achter-Sets gehen jeweils von Richtung zwölf um den Uhrzeigersinn alle Richtungen ab.
@@ -500,7 +496,7 @@ class SmartSnake extends Snake {
        
 \end{lstlisting}
 
-Die Funktion predict(input) eines neuronalen Netzwerkes ist genau das, was im Kapitel "Neuronale Netzwerke" besprochen wird. Die Matrix der Gewichte zwischen Input- und Hidden-Layer wird mit dem Input-Vektor multipliziert, das Ergebnis wird zu den Hidden-Biases addiert und dessen Ergebnis wird von der Activation-Funktion umgerechnet. Dann wird der dabei entstandene Vektor der Länge 8 mit der Matrix der zweiten Gewichte multipliziert, zu der zweiten Bias addiert und nochmal aktiviert. Für die Richtigkeit des Resultats sind natürlich die Gewichte, weights, und die biases. Um zu lernen müssen genau dies auch verändert werden. Dies geschieht in meinem Beispiel dank des genetischen Algorithmus, der die guten Schlangen benützt, um eine neue Generation von Schlangen zu züchten, welche, dank besserer DNA, bzw besserer Netzwerke, durchschnittlich auch bessere Resultate erzielen. Wichtig ist dabei, den guten Schlangen klar höhere Chancen zu geben, aber trotzdem nicht nur mit den besten 5 Schlangen neue züchten, sodass all das wertvolle Erbmaterial im Nu verloren geht und nach wenigen Generationen alle Schlangen identische Netzwerke haben. Dies wird mit sogenannter fitnessproportionaler Selektion geschafft. Diese Selektion ist eine Methode, die eine Schlange mit einer, wie der Name sagt, zu ihrer Fitness proportionalen Chance auswählt, um Kinder machen zu dürfen. Die Fitness ist dabei der Score, von dem wir im Kapitel "genetische Algorithmen" gesprochen haben. Bei meinen Schlangen wird diese Fitness aus der Lebenszeit und der Länge einer Schlange berechnet. Eine Schlange die einen Score von 300 hat, wird also mit doppelter Wahrscheinlichkeit ausgewählt, um ihr Genmaterial an die nächste Generation weiterzugeben, als eine mit dem Score 150. Dieses Verfahren haben wir auch schon bei dein Shakespeare-Affen des Kapitels "genetische Algorithmen" benutzt. Und so sieht 
+Die Funktion \textCode{predict(input)} eines neuronalen Netzwerkes ist genau das, was im Kapitel "Neuronale Netzwerke" besprochen wird. Die Matrix der Gewichte zwischen Input- und Hidden-Layer wird mit dem Input-Vektor multipliziert, das Ergebnis wird zu den Hidden-Biases addiert und dessen Ergebnis wird von der Activation-Funktion umgerechnet. Dann wird der dabei entstandene Vektor der Länge 8 mit der Matrix der zweiten Gewichte multipliziert, zu der zweiten Bias addiert und nochmal aktiviert. Für die Richtigkeit des Resultats sind natürlich die Gewichte, weights, und die biases. Um zu lernen müssen genau dies auch verändert werden. Dies geschieht in meinem Beispiel dank des genetischen Algorithmus, der die guten Schlangen benützt, um eine neue Generation von Schlangen zu züchten, welche, dank besserer DNA, bzw besserer Netzwerke, durchschnittlich auch bessere Resultate erzielen. Wichtig ist dabei, den guten Schlangen klar höhere Chancen zu geben, aber trotzdem nicht nur mit den besten 5 Schlangen neue züchten, sodass all das wertvolle Erbmaterial im Nu verloren geht und nach wenigen Generationen alle Schlangen identische Netzwerke haben. Dies wird mit sogenannter fitnessproportionaler Selektion geschafft. Diese Selektion ist eine Methode, die eine Schlange mit einer, wie der Name sagt, zu ihrer Fitness proportionalen Chance auswählt, um Kinder machen zu dürfen. Die Fitness ist dabei der Score, von dem wir im Kapitel "genetische Algorithmen" gesprochen haben. Bei meinen Schlangen wird diese Fitness aus der Lebenszeit und der Länge einer Schlange berechnet. Eine Schlange die einen Score von 300 hat, wird also mit doppelter Wahrscheinlichkeit ausgewählt, um ihr Genmaterial an die nächste Generation weiterzugeben, als eine mit dem Score 150. Dieses Verfahren haben wir auch schon bei dein Shakespeare-Affen des Kapitels "genetische Algorithmen" benutzt. Und so sieht 
 das in meinem Code aus:
 
 \begin{lstlisting}[
@@ -585,9 +581,9 @@ class Population {
     \vspace{-15pt}
 \end{wrapfigure} 
 
-Der Prozess der Auswahl anhand der Hilfsvariable \textCode{accFit} kann sich auch bildlich vorgestellt werden. Alle Schlangen werden nach der Fitness in absteigender Reihenfolge sortiert. Jede Schlange hat nun einem Kiste mit einer Breite, die gleich ist wie ihre Fitness. Somit entspricht der Abstand des rechten Randes einer bestimmte "Schlangenkiste" zum linken Rand der linksten "Schlangenkiste" der \textCode{accFit} der betroffenen Schlange. Dann wird ein Dart auf die Kisten geworfen, dieser Dart trifft überall, von links bis rechts, mit der gleichen Wahrscheinlichkeit. Die Schlange der getroffenen Schlangenkiste wird ausgewählt. So simpel.
+Der Prozess der Auswahl anhand der Hilfsvariable \textCode{accFit} kann sich auch bildlich vorgestellt werden. Alle Schlangen werden nach der Fitness in absteigender Reihenfolge sortiert. Jede Schlange hat nun einem Kiste mit einer Breite, die gleich ist wie ihre Fitness. Somit entspricht der Abstand des rechten Randes einer bestimmte "Schlangenkiste" zum linken Rand der linksten "Schlangenkiste" der \textCode{accFit} der betroffenen Schlange. Dann wird ein Dart auf die Kisten geworfen, dieser Dart trifft überall, von links bis rechts, mit der gleichen Wahrscheinlichkeit. Die Schlange der getroffenen Schlangenkiste wird ausgewählt. So simpel.\\
 
-Das Crossover bespreche ich hier nicht, da es schon im Kapitel "Natur- und Computer-Evolution" genau behandelt wurde.
+Das Crossover bespreche ich hier nicht, da es schon im Kapitel "Natur- und Computer-Evolution" genau behandelt wurde.\\
 
 Die Mutation ist wiederum sehr einfach, bei jeder Schlange wird über alle Gene gegangen und bei einer Wahrscheinlichkeit von beispielsweise 1\%, bzw der Mutationsrate, wird das Gen etwas verändert.
 
@@ -630,19 +626,17 @@ Zuerst erkläre ich alle diese Einstellungen:
     \end{enumerate}
 \end{itemize}
 
-Am Auffälligsten sind wahrscheinlich die verschiedenfarbigen und verschieden satten Hintergründe der Diagramme. Doch zuerst muss ich die eigentlichen Diagramme erklären, damit diese ebenfalls Sinn ergeben. Die X-Achse sind jeweils die 15 Generationen eines Versuches. Die Y-Achse hat die Einheit des Scores der Fitness-Funktion. Die blaue Linie zeigt jeweils die besten Scores einer einzelnen Generation. Die orange den Durchschnitt der Generation und die grüne den schlechtesten Score. Dementsprechend zeigt ein Diagramm den Verlauf der Leistungen einer Population über die Generationen. Diese Leistung wird anhand der Besten, des Schnitts sowie den Schlechtesten aufgezeigt. Die Farben dienen der Unterscheidung der Fitness-Funktionen, denn ein Score von 200 bei der zweiten Funktion ist nicht das gleiche wie ein Score von 200 bei der fünften Fitness-Funktion. Die Sättigkeit des Hintergründe zeigt das Verhältnis zwischen eigenem Maximalscore und dem Maximalscore aller Versüche dieser Fitness-Funktion. Die rötesten Diagramme sind also die Versüche mit den höchsten Scores aller Versüche auf Zeilen 1, 6 und 11.
+Am Auffälligsten sind wahrscheinlich die verschiedenfarbigen und verschieden satten Hintergründe der Diagramme. Doch zuerst muss ich die eigentlichen Diagramme erklären, damit diese ebenfalls Sinn ergeben. Die X-Achse sind jeweils die 15 Generationen eines Versuches. Die Y-Achse hat die Einheit des Scores der Fitness-Funktion. Die blaue Linie zeigt jeweils die besten Scores einer einzelnen Generation. Die orange den Durchschnitt der Generation und die grüne den schlechtesten Score. Dementsprechend zeigt ein Diagramm den Verlauf der Leistungen einer Population über die Generationen. Diese Leistung wird anhand der Besten, des Schnitts sowie den Schlechtesten aufgezeigt. Die Farben dienen der Unterscheidung der Fitness-Funktionen, denn ein Score von 200 bei der zweiten Funktion ist nicht das gleiche wie ein Score von 200 bei der fünften Fitness-Funktion. Die Sättigkeit des Hintergründe zeigt das Verhältnis zwischen eigenem Maximalscore und dem Maximalscore aller Versüche dieser Fitness-Funktion. Die rötesten Diagramme sind also die Versüche mit den höchsten Scores aller Versüche auf Zeilen 1, 6 und 11.\\
 
 Doch nun zur Analyse, gut ersichtlich ist, dass die mittleren 3 Spalten meistens weniger satt sind, als links und rechts. Folglich ist das Net 2, also die Struktur (24, 8, 8, 4) nicht so gut wie die beiden Anderen. Die Unterschiede zwischen denn verschiedenen Netzwerk-Strukturen sind mit einem etwas anderen Test noch besser ersichtlich. Ich lasse eine riesige Population von 80000 Schlangen zufällig initialisieren und das Game spielen und schaue dann direkt die Resultate an, ohne Evolution stattfinden zu lassen. Somit ist das Glück, dass beim Net 3 vielleicht einfach eine bessere Anfangspopulation vorhanden war, auszuschliessen.
 
-% TODO::
-% Farben von worst und mean beim dritten Bild gleich!!!
 \begin{center}
     %\includegraphics[width=0.47\textwidth]{Downloads/barplotA.png}
     \includegraphics[width=0.47\textwidth]{Downloads/barplotB.png}
     \includegraphics[width=0.47\textwidth]{Downloads/barplotMW.png}
 \end{center}
 
-Da die besten Fitnessen der Population so viel höher sind als der Schnitt, ist es besser die besten gesondert zu betrachten. Nun ist definitv zu erkennen, dass das Net 3 die anderen übertrifft, denn nicht nur der beste Score sondern auch der Schnitt ist dort jeweils am höchsten. 
+Da die besten Fitnessen der Population so viel höher sind als der Schnitt, ist es besser die besten gesondert zu betrachten. Nun ist definitv zu erkennen, dass das Net 3 die anderen übertrifft, denn nicht nur der beste Score sondern auch der Schnitt ist dort jeweils am höchsten.\\
 
 Um die Verschiedenheiten der verschiedenen Fitness-Funktionen zu verstehen, müssen wir uns zuerst die Funktionen anschauen:\\
 pow(x, y) ist $x^y$.
@@ -662,32 +656,33 @@ pow(x, y) ist $x^y$.
 }
 
 % Python Fitness Function
+\begin{addmargin}[2em]{0em}
 \begin{lstlisting}
     def cf1(lifetime, length):
-        if length < 10:
-            return lifetime*lifetime*pow(2, length)/1000
-        else:
-            return lifetime*lifetime*pow(2,10)*(length-9)/1000
-    def cf2(lifetime, length):
-        if length < 10:
-            return lifetime * 0.5 + length * length
-        else:
-            return 9 * 9 + (length - 9) * 8 + 100 + (lifetime - 100) * 0.5
-    def cf3(lifetime, length):
-        if length < 10:
-            res = lifetime * 0.5 + length * length
-        else:
-            res = lifetime * 0.5 + 81 + (length-9) * 10
-        return res * res
-    def cf4(lifetime, length):
-        return lifetime * 0.1 + length * length
+    if length < 10:
+        return lifetime*lifetime*pow(2, length)/1000
+    else:
+        return lifetime*lifetime*pow(2,10)*(length-9)/1000
+def cf2(lifetime, length):
+    if length < 10:
+        return lifetime * 0.5 + length * length
+    else:
+        return 9 * 9 + (length - 9) * 8 + 100 + (lifetime - 100) * 0.5
+def cf3(lifetime, length):
+    if length < 10:
+        res = lifetime * 0.5 + length * length
+    else:
+        res = lifetime * 0.5 + 81 + (length-9) * 10
+    return res * res
+def cf4(lifetime, length):
+    return lifetime * 0.1 + length * length
 
-    def cf5(lifetime, length):
-        return (lifetime * lifetime * 0.1 * pow(2, length))
+def cf5(lifetime, length):
+    return (lifetime * lifetime * 0.1 * pow(2, length))
 \end{lstlisting}
+\end{addmargin}
 
-Wenn man das visualisiert, sieht das so aus:\\
-Die X-Achse ist jeweils die Länge der Schlange, die Y-Achse die Lebenszeit und die Z-Achse die Fitness.
+Wenn man das visualisiert, sieht das so aus:
 
 \begin{center}
     \includegraphics[width=0.325\textwidth]{Downloads/cf1.png}
@@ -701,19 +696,20 @@ Die X-Achse ist jeweils die Länge der Schlange, die Y-Achse die Lebenszeit und 
     \includegraphics[width=0.325\textwidth]{Downloads/cf5.png}
 \end{center}
 
+Die X-Achse ist jeweils die Länge der Schlange, die Y-Achse die Lebenszeit und die Z-Achse die Fitness.\\
 
 Die zweite und vierte Fitness-Funktion scheinen ziemlich flach zu sein. Dies sieht man auch bei den Evolutionsresultaten. Erstens ist im Laufe der Generationen kein Fortschritt erkennbar, was auf die mangelnde Überlegenheit der besseren Schlangen zurückzuführen ist. Dh die besseren Schlangen, die eigentlich ihr Erbmaterial vererben sollten, können es nicht genug vererben, da die Selektion sie kaum bevorzugt. Ausserdem führen alle Versuche zu sehr ähnlichen Resultaten.\\
+
 Die fünfte Fitness-Funktion ist definitv zu exponentiell, da bei ihr jeweils vereinzelte Versuche (durch Glück) einen im Vergleich wahnsinnig hohen Score zustande bringen und dieser mit gleicher DNA, die offensichtlich vererbt worden sein muss, oft nicht nochmals möglich ist.\\
+
 Das Problem der dritten Funktion ist hauptsächlich, dass es die Lebenszeit zu gewichtig zählt. Das führt zu Schlangen, die endlos im Kreis drehen. Und da ich für Trainingszwecke Schlangen nach einer zu langen Zeit, keine Frucht zu essen, sterben lasse, führt das zu keinen guten Resultaten. Man fragt sich dann vielleicht, wieso ich überhaupt die Lebenszeit in die Fitness miteinbeziehe, weil doch eigentlich nur die Länge zählt. Wenn ich sie nicht mit einbeziehen würde, würden die anfangs so schlechten, zufällig initialisierten Schlangen alle eine Fitness von Null haben. Wenn aber doch einige eine Frucht gegessen haben, ist das zu einem grossen Teil pures Glück, weil die Frucht gerade auf dem Weg lag.\\
-Nun bleibt noch die erste, bei ihr ist die Steigung grundsätzlich schon ziemlich passend. Wenn man die Evolutionsresultate anschaut, wird das auch bestätigt. Die Schlangen verbessern sich richtig, da die blauen Graphen oft kontinuierlich steigen. Das ist bei den anderen Fitness-Funktionen oft nicht der Fall. Ausserdem hat es diese vereinzelten Spitzen nicht ganz so oft wie etwa Funktion 3 und 5. Diese Spitzen würden darauf hindeuten, dass die Funktion zu exponentiell ist. Das scheint sie nicht zu sein.
 
-\bigskip
-Bei den Mutationsraten sieht man vorallem in den letzten drei Spalten, wie die 5\%ige die besten Resultate bringt. Doch in den Vergleichen werden auch relativ kleine Populationsgrössen benutzt. Deshalb werde ich beim Endexperiment trotzdem eine Mutationsrate von einem Prozent benutzen, da ich dann auch grössere Populationen benutzen werde und somit trotzdem genug Mutation vorhanden ist.
+Nun bleibt noch die erste, bei ihr ist die Steigung grundsätzlich schon ziemlich passend. Wenn man die Evolutionsresultate anschaut, wird das auch bestätigt. Die Schlangen verbessern sich richtig, da die blauen Graphen oft kontinuierlich steigen. Das ist bei den anderen Fitness-Funktionen oft nicht der Fall. Ausserdem hat es diese vereinzelten Spitzen nicht ganz so oft wie etwa Funktion 3 und 5. Diese Spitzen würden darauf hindeuten, dass die Funktion zu exponentiell ist. Das scheint sie nicht zu sein.\\
 
-\bigskip
-Offensichtlich ist eine Population von nur 1000 Schlangen zu klein, da dort klar die schlechtesten Resultate erzielt wurden. Zwischen 5000 und 10000 sieht man zwar fast keinen Unterschied, aber ich werde sowieso noch etwas mehr benutzen, da ich dann im Vergleich zwischen Natur-Evolution und Computer-Evolution nur zweimal Evolution laufen lassen muss und nicht wie in diesem Quervergleich 135 Mal für die 5 verschiedenen Fitness-Funktionen, 3 Populationsgrössen, 3 Mutationsraten und 3 Netzwerkstrukturen.
+Bei den Mutationsraten sieht man vorallem in den letzten drei Spalten, wie die 5\%ige die besten Resultate bringt. Doch in den Vergleichen werden auch relativ kleine Populationsgrössen benutzt. Deshalb werde ich beim Endexperiment trotzdem eine Mutationsrate von einem Prozent benutzen, da ich dann auch grössere Populationen benutzen werde und somit trotzdem genug Mutation vorhanden ist.\\
 
-\bigskip
+Offensichtlich ist eine Population von nur 1000 Schlangen zu klein, da dort klar die schlechtesten Resultate erzielt wurden. Zwischen 5000 und 10000 sieht man zwar fast keinen Unterschied, aber ich werde sowieso noch etwas mehr benutzen, da ich dann im Vergleich zwischen Natur-Evolution und Computer-Evolution nur zweimal Evolution laufen lassen muss und nicht wie in diesem Quervergleich 135 Mal für die 5 verschiedenen Fitness-Funktionen, 3 Populationsgrössen, 3 Mutationsraten und 3 Netzwerkstrukturen.\\
+
 Zusammenfassend entscheide ich mich also für eine 1\%ige Mutationsrate, die erste Fitness-Funktion, das Net 3 und eine 25000 grosse Population. 25000 nehme ich schlicht, weil es das Maximum ist, das noch keine Speicherprobleme mit sich bringt. Mit diesen Einstellungen denke ich, dass der Vergleich zwischen Natur-Evolution und Computer-Evolution gute Konditionen hat und zu den am besten brauchbaren Resultaten führen wird.
 
 \subsection{Vergleich Natur- und Computer-Evolution}
@@ -725,9 +721,8 @@ In diesem Kapitel komme ich zum Endziel dieses Teils meiner Maturaarbeit. Der Ve
     \includegraphics[width=1\textwidth]{Downloads/finalMW.png}
 \end{center}
 
-Sehr spannende Resultate, welche genaue Auseinandersetzung benötigen, um verstanden zu werden. Zuerst rein objektive Beobachtungen: Die maximale Fitness, die die Computer-Evolution erreichte, ist 338 Millionen während die Natur-Evolution auf höchstens 5.1 Millionen kam. Die Computer-Evolution in Generation 7 66 Prozent der maximalen Fitness und die Natur-Evolution in Generation 10 82 Prozent ihres Rekords. Natur- wie auch Computer-Evolution steigerten ihre besten Scores nach den ersten Spitzen nur noch wenig. Der Durchschnitt erreichte bei der Computer-Evolution den Spitzenwert von knapp 2.5 Millionen in Generation 25. Schon in der dreizehnten Generation gipfelte der Durchschnitt der Natur-Evolution bei einer Fitness von 1026. Der Schnitt der Computer-Evolution verschlechterte sich kein einziges Mal. Die Natur-Evolution verschlechterte sich im Schnitt einige Male und machte ab der zehnten Generation mehr oder weniger keinen Fortschritt. 
+Sehr spannende Resultate, welche genaue Auseinandersetzung benötigen, um verstanden zu werden. Zuerst rein objektive Beobachtungen: Die maximale Fitness, die die Computer-Evolution erreichte, ist 338 Millionen während die Natur-Evolution auf höchstens 5.1 Millionen kam. Die Computer-Evolution in Generation 7 66 Prozent der maximalen Fitness und die Natur-Evolution in Generation 10 82 Prozent ihres Rekords. Natur- wie auch Computer-Evolution steigerten ihre besten Scores nach den ersten Spitzen nur noch wenig. Der Durchschnitt erreichte bei der Computer-Evolution den Spitzenwert von knapp 2.5 Millionen in Generation 25. Schon in der dreizehnten Generation gipfelte der Durchschnitt der Natur-Evolution bei einer Fitness von 1026. Der Schnitt der Computer-Evolution verschlechterte sich kein einziges Mal. Die Natur-Evolution verschlechterte sich im Schnitt einige Male und machte ab der zehnten Generation mehr oder weniger keinen Fortschritt.\\
 
-\bigskip
 Offensichtlich hat die Natur-Evolution einiges schlechter abgeschnitten. Doch anhand weiterer Daten habe ich bemerkt, dass bei der Computer-Evolution etwas aussergewöhnliches passiert ist. In der nullten Generation, bzw. die die zufällig initialisiert wurde, gab es eine Schlange die für die zufällige Initialisierung wahnsinnig gut abgeschnitten hat. Sie hatte eine Fitness 412000, was extrem hoch ist. Ganz allein hat sie den Durchschnitt von 8.4 auf knapp 25 angehoben. Somit entstand eine seltsame erste gezüchtete Generation. 11000 Kopien der besten Schlange entstanden, da als Vater wie auch als Mutter diese ausgewählt wurde, ja das ist hier möglich. Dazu ist bei weiteren 11000 Schlangen nur ein Elternteil die gute, was nur noch 3000 Schlangen übrig lässt, die nicht von der Mega-Schlange abstammen. Spätestens in der zweiten und dritten gezüchteten Generation wird dieses \enquote{Geschlecht} die ganze Population übernommen haben. Deshalb habe ich das Experiment wiederholt. Da ich in meiner Hypothese an die langfristige Überlegenheit der Natur-Evolution glaubte, habe ich diese nun doppelt solange laufen lassen. Ziemlich ähnliche Resultate sind dabei herausgekommen:
 
 \begin{center}
@@ -735,17 +730,15 @@ Offensichtlich hat die Natur-Evolution einiges schlechter abgeschnitten. Doch an
     \includegraphics[width=1\textwidth]{Downloads/final2MW.png}
 \end{center}
 
-Zuerst wieder zu den Zahlen: Dieses Mal erreichte die Computer-Evolution eine maximale Fitness von fast 180 Millionen, der Rekord der Natur-Evolution ist 16300. Im Gegensatz zum ersten Durchlauf sieht man jetzt besser die stetige Steigerung der Topscores der Computer-Evolution. Bei der Natur-Evolution ist die Maximal-Fitness wieder ab 10. Generation stehen geblieben, und zwar bei klar tieferen Resultaten als im ersten Durchlauf. Den höchsten Durchschnitt erreichte die Natur-Evolution diesmal eher am Schluss, nämlich in der 41. Generation, sie hatte in der 10. Generation jedoch schon 95\% dessen und blieb danach wie gesagt stehen. Die Computer-Evolution hingegen hat sich wie beim ersten Mal nicht einmal im Schnitt verschlechtert, vielmehr hat sie sich stetig zu höheren Durchschnitten emporgearbeitet.
+Zuerst wieder zu den Zahlen: Dieses Mal erreichte die Computer-Evolution eine maximale Fitness von fast 180 Millionen, der Rekord der Natur-Evolution ist 16300. Im Gegensatz zum ersten Durchlauf sieht man jetzt besser die stetige Steigerung der Topscores der Computer-Evolution. Bei der Natur-Evolution ist die Maximal-Fitness wieder ab 10. Generation stehen geblieben, und zwar bei klar tieferen Resultaten als im ersten Durchlauf. Den höchsten Durchschnitt erreichte die Natur-Evolution diesmal eher am Schluss, nämlich in der 41. Generation, sie hatte in der 10. Generation jedoch schon 95\% dessen und blieb danach wie gesagt stehen. Die Computer-Evolution hingegen hat sich wie beim ersten Mal nicht einmal im Schnitt verschlechtert, vielmehr hat sie sich stetig zu höheren Durchschnitten emporgearbeitet.\\
 
-Meine Hypothese war, dass die Natur-Evolution nach anfänglicher Führung der Computer-Evolution schlussendlich bessere Resultate erreichte. Diese lag offensichtlich ziemlich gänzlich falsch, da ich das Potenzial der Computer-Evolution ziemlich unterschätzt habe und ich vielleicht zu viel Hoffnung auf unsere Natu gesetzt habe. Im Folgenden werde ich die unerwarteten Resultate erläutern.
+Meine Hypothese war, dass die Natur-Evolution nach anfänglicher Führung der Computer-Evolution schlussendlich bessere Resultate erreichte. Diese lag offensichtlich ziemlich gänzlich falsch, da ich das Potenzial der Computer-Evolution ziemlich unterschätzt habe und ich vielleicht zu viel Hoffnung auf unsere Natu gesetzt habe. Im Folgenden werde ich die unerwarteten Resultate erläutern.\\
 
-Die Natur-Evolution hat doch einige Nachteile, denen ich mir anfangs nicht bewusst war. Zum Beispiel ist die dominante Erbinformation weniger divers. Wegen der Dominanz der stärkeren Genen (grössere Zahl) ist die Wahrscheinlichkeit, dass ein Gen grösser als 0.5 ist, nicht 50\%, sondern 75\%. Dies beeinflusst die Effizienz der neuronalen Netzwerke, denn wenn alle Gewichte und Biases ähnlicher sind, funktioniert der Denkprozess nicht so gut. Man braucht ja genau ziemlich verschiedene Gewichte um die Inputs unterschiedlich zu behandeln. Das kann man sich auch etwa so vorstellen wie der Unterschied zwischen einer schwarz-weissen Sicht und farbiger Sicht, was aber eher überspitzt ist.
+Die Natur-Evolution hat doch einige Nachteile, denen ich mir anfangs nicht bewusst war. Zum Beispiel ist die dominante Erbinformation weniger divers. Wegen der Dominanz der stärkeren Genen (grössere Zahl) ist die Wahrscheinlichkeit, dass ein Gen grösser als 0.5 ist, nicht 50\%, sondern 75\%. Dies beeinflusst die Effizienz der neuronalen Netzwerke, denn wenn alle Gewichte und Biases ähnlicher sind, funktioniert der Denkprozess nicht so gut. Man braucht ja genau ziemlich verschiedene Gewichte um die Inputs unterschiedlich zu behandeln. Das kann man sich auch etwa so vorstellen wie der Unterschied zwischen einer schwarz-weissen Sicht und farbiger Sicht, was aber eher überspitzt ist.\\
 
-Andererseits ist die Natur-Evolution auch insofern im Nachteil, wie die Leistung einer Schlange gar nicht unbedingt das symbolisiert, was sie vererben kann. Es kann also sein das sich die dominanten Gene des Chromosomenpaars einer bestimmten Schlange perfekt kombinieren. Wenn es nun Kinder macht, vererbt sie jedoch jeweils nur eines ihrer beiden Chromosome. Dieses könnte zusammen mit dem anderen Chromosom, welches das Kind erbt, ganz andere dominante Gene hervorbringen, die gar nicht gut funktionieren. Die Computer-Evolution ist natürlich auch davon abhängig, ob eine gute Paarung gemacht wird, die ein zufriedenstellendes Kind zeugt. Jedoch vererbt eine Schlange, die in der Computer-Evolution eine hohe Fitness hatte, mit Sicherheit auch die Gene, welche sie selbst benutzte. Dies führt zu einer grösseren Verlässlichkeit, das gute Schlangen auch wirklich guten Nachwuchs zeugen.
+Andererseits ist die Natur-Evolution auch insofern im Nachteil, wie die Leistung einer Schlange gar nicht unbedingt das symbolisiert, was sie vererben kann. Es kann also sein das sich die dominanten Gene des Chromosomenpaars einer bestimmten Schlange perfekt kombinieren. Wenn es nun Kinder macht, vererbt sie jedoch jeweils nur eines ihrer beiden Chromosome. Dieses könnte zusammen mit dem anderen Chromosom, welches das Kind erbt, ganz andere dominante Gene hervorbringen, die gar nicht gut funktionieren. Die Computer-Evolution ist natürlich auch davon abhängig, ob eine gute Paarung gemacht wird, die ein zufriedenstellendes Kind zeugt. Jedoch vererbt eine Schlange, die in der Computer-Evolution eine hohe Fitness hatte, mit Sicherheit auch die Gene, welche sie selbst benutzte. Dies führt zu einer grösseren Verlässlichkeit, das gute Schlangen auch wirklich guten Nachwuchs zeugen.\\
 
 Im Vorhinein sagte ich, dass die Natur-Evolution von einer doppelt so grossen Menge Erbmaterial profitieren könnte. Doch offensichtlich geht es mehr um die richtige Kombination als, um die richtige Zahl bei einem bestimmten Gen. Die Natur-Evolution hat, was Kombinationspotenzial angeht, einen sehr grossen Nachteil. Wenn man  sich die Mutation wegdenkt, hat die Natur-Evolution pro Chromosom genau doppelt so viele Exemplare, wie Schlangen in der Population sind. Weil es sich bei diesem Projekt, um eine DNA mit nur einem einzigen Chromosom, dem neuronalen Netzwerk, handelt, hat es bei 25000 Schlangen, 50000 Chromosome mit der Information für je ein Netzwerk. Ein einzelnes Individuum hat jeweils zwei solche Exemplare als Chromosomenpaar, woraus sie die dominanten Gene wählt. Somit sind eigentlich $ {50000 \choose 2} = 1249975000 $ verschiedene Chromosomenpaare und somit Schlangen. Vernachlässigt ist hierbei wie gesagt Mutation und der Verlust grosser Teile an Information über die Generationen, sodass nie alle 1.2 Milliarden Chromosomenpaare realisiert werden. Die Anzahl dieser Möglichkeiten scheint vielleicht gross zu sein, doch wenn man sich die Computer-Evolution anschaut, sieht das ganz anders aus. Für jedes einzelnes Gen gibt es so viel Exemplare wie Schlangen. Dh eigentlich halb so viele wie bei der Natur-Evolution. Doch da bei der Computer-Evolution immer wieder neu Chromosome aus den Elternchromosomen gemischt werden und diese auch vererbt werden (Bei der Natur-Evolution wird auch aus Vater- und Mutterchromosom gemischt, doch sozusagen die Hälfte der Zutaten vererbt, anstatt dem Gemisch), gibt es für jedes Gen 25000 Varianten, die beliebig kombiniert werden können. Weil das Neuronale Netzwerk 468 Parameter, also alle Gewichte und Biases hat, gibt es somit $ 25000^{468} $ verschiedene Schlangen, die ohne jegliche Mutation gezüchtet werden könnten. Das ist $ 1.72e2058 $. Die Natur-Evolution hatte $ 1.25e9 $. Das ein riesiger Unterschied. Die Unabhängigkeit von den Chromosomen bringt diesen entscheidenden Vorteil. In meinem hatten die Schlangen zwar auch nur ein einziges Chromosom, was den Nachteil der Natur-Evolution noch verstärkt, doch in unserer Natur haben die meisten Lebewesen unter 100 Chromosomen und vereinzelt bis zu 1300 \footnote{(http://www.biologie-lexikon.de/lexikon/chromosomenzahl.php)}. Das ist zwar klar mehr als in meinem Projekt, aber es sind natürlich auch viel mehr Gene vorhanden, beispielsweise beim Menschen zählt man zwischen 25 bis über 120 Tausend. Nur schon mit 20000 Genen, übersteigt das die Anzahl Chromosome genug, um bei der Computer-Evolution ein Vielfaches mehr verschiedene Kombinationen zu ermöglichen, als sich bei der Natur-Evolution je möglich ist.
-
-
 
 \pagebreak
 \section{Fingeralphabet-Erkennung}
@@ -787,20 +780,20 @@ Dann programmierte ich mit der Machine Learning Bibliothek \enquote{pytorch}, de
     \includegraphics[width=0.45\textwidth]{Downloads/BWresults/ep15.png}
 \end{center}
 
-Auf der Zeile ist jeweils der Buchstabe, der getestet wurde, dh das Ziel für das Netzwerk. Die Summe einer Zeile ist immer Hundert. Denn in einer Zelle steht, wie viel Prozent der getesteten Bilder des Buchstabens der Zeile mit dem Buchstaben der Spalte beantwortet wurde. 
+Auf der Zeile ist jeweils der Buchstabe, der getestet wurde, dh das Ziel für das Netzwerk. Die Summe einer Zeile ist immer Hundert. Denn in einer Zelle steht, wie viel Prozent der getesteten Bilder des Buchstabens der Zeile mit dem Buchstaben der Spalte beantwortet wurde.\\
 
-Eine Epoche ist der Prozess einmal jedes Bild des Trainingsset zu lernen.
+Eine Epoche ist der Prozess einmal jedes Bild des Trainingsset zu lernen.\\
 
 Wie man gut sehen kann, hat das anfangs zufällig initialisierte Neuronale Netzwerk eine Vorliebe für einige der Buchstaben. Egal, was getestet wird, antwortet es sehr häufig mit \enquote{G}, da es einfach so \enquote{geboren} wurde. Doch während des Trainings wird es langsam verbessert und lernt verschiedene Antworten zu geben. Dabei sieht man sehr schön, wie sich die Farbe langsam bei der Diagonalen festigt, weil mehr und mehr die Tests pro Buchstabe 100\%ig korrekt beantwortet werden. Von Epoche 10 bis 100 steigert sich die Präzision nur noch von 98.3\% zu 99.8\%. Das ist eher schlecht als recht. Denn wenn ein neuronales Netzwerk seine Trainingsdaten zu gut kennt, führt das zu dem vorhin genannten Overfitting. Dh es kennt die Bilder des Trainings sozusagen auswendig und ist nicht mehr auf ihm unbekannte Bilder anwendbar. Dies ist möglichst zu vermeiden.
 
 \subsubsection{Fingeralphabet}
 
-Nach einem erfolgreichen Testlauf mit den schwarzweissen Buchstaben, konnte ich mich der wahren Aufgabe zuwenden. Ursprünglich habe ich ein Datenset der American Sign Language auf Kaggle\footnote{https://www.kaggle.com/grassknoted/asl-alphabet} gefunden. Dieses Datenset war jedoch sehr gleichmässig, dh die Handzeichen wurden stets vor exakt gleichem Hintergrund aufgenommen, nur nicht immer in der Mitte. Deshalb wollte ich selbst ein Datenset erstellen. Für das machte ich Videos des deutschschweizer Fingeralphabets mit meiner Familie. Ich benutzte also drei verschiedene Hände und drehte jeweils die Kamera beim Filmen, sodass sich der Hintergrund stetig etwas verändert. Ausserdem drehte ich an fünf Stellen mit unterschiedlichen Hintergründen. Würde man nur einmal durch das Alphabet gehen, kann ein sehr ungewollter Fehler passieren. Da jeder Buchstabe einige Minuten später gefilmt wird, ist das Sonnenlicht immer etwas schwächer und somit könnte die künstliche Intelligenz die Buchstaben einfach anhand der Helligkeit des Hintergrunds erkennen. Deshalb bin ich auch mehrmals und zu verschiedenen Tageszeiten durch das Alphabet gegangen und habe alle Zeichen gefilmt. Doch eigentlich wollte ich ja Fotos der Handzeichen. Da ich 3000 Bilder jedes Zeichens brauchte, war einzeln fotografieren eigentlich keine Option. Vielmehr habe ich jedes hundert Sekunden lang bei dreissig Bildern pro Sekunde gefilmt und die Resultate mit einem Python-Skript in Bilder des JPEG-Formats umgewandelt. Somit hatte ich mit verhältnismässig wenig Aufwand schnell mein Datenset. Mit 26 Buchstaben, einem SCH, einem CH und einer Kategorie, die nichts symbolisiert, hatte ich $ 29*3000 = 87000 $ Bilder. Nun konnte ich mich dem Trainieren des CNN widmen.
+Nach einem erfolgreichen Testlauf mit den schwarzweissen Buchstaben, konnte ich mich der wahren Aufgabe zuwenden. Ursprünglich habe ich ein Datenset der American Sign Language auf Kaggle\footnote{https://www.kaggle.com/grassknoted/asl-alphabet} gefunden. Dieses Datenset war jedoch sehr gleichmässig, dh die Handzeichen wurden stets vor exakt gleichem Hintergrund aufgenommen, nur nicht immer in der Mitte. Deshalb wollte ich selbst ein Datenset erstellen. Für das machte ich Videos des deutschschweizer Fingeralphabets mit meiner Familie. Ich benutzte also drei verschiedene Hände und drehte jeweils die Kamera beim Filmen, sodass sich der Hintergrund stetig etwas verändert. Ausserdem drehte ich an fünf Stellen mit unterschiedlichen Hintergründen. Würde man nur einmal durch das Alphabet gehen, kann ein sehr ungewollter Fehler passieren. Da jeder Buchstabe einige Minuten später gefilmt wird, ist das Sonnenlicht immer etwas schwächer und somit könnte die künstliche Intelligenz die Buchstaben einfach anhand der Helligkeit des Hintergrunds erkennen. Deshalb bin ich auch mehrmals und zu verschiedenen Tageszeiten durch das Alphabet gegangen und habe alle Zeichen gefilmt. Doch eigentlich wollte ich ja Fotos der Handzeichen. Da ich 3000 Bilder jedes Zeichens brauchte, war einzeln fotografieren eigentlich keine Option. Vielmehr habe ich jedes hundert Sekunden lang bei dreissig Bildern pro Sekunde gefilmt und die Resultate mit einem Python-Skript in Bilder des JPEG-Formats umgewandelt. Somit hatte ich mit verhältnismässig wenig Aufwand schnell mein Datenset. Mit 26 Buchstaben, einem SCH, einem CH und einer Kategorie, die nichts symbolisiert, hatte ich $ 29*3000 = 87000 $ Bilder. Nun konnte ich mich dem Trainieren des CNN widmen.\\
 
 Zuerst habe einige Änderungen bei der Struktur des Netzwerks vorgenommen, da das Format der Bilder nun 320x240, und nicht mehr 32x32, ist und jetzt in 29 Kategorien anstatt in 27 zu kategorisieren ist. Nach einer ersten Version, die mit dem neuen Datenset funktionierte, habe ich zuerst einfach einen Testlauf gemacht, um zu schauen wie das Netzwerk sich so macht. Jedoch gibt es bei diesem Datenset ein neues Problem, die Rechenleistung meines Laptops reichte lang nicht mehr aus. In einer ganzen Nacht kam er mit dem Training nicht annähernd so weit wie erhofft. Doch die ETH-Studenten wussten natürlich weiter. Ich konnte mich mit SSH und SCP über einen Server mit einem Computer mit einem GPU, einer Grafikkarte, ihrer Abteilung verbinden und von meinem Laptop aus steuern. Das ermöglichte mir auf eine viel höhere Rechenleistung zuzugreifen. 
 
 \subsection{Schluss}
-\section{Outro}
 
+\section{Outro}
 
 \end{document}
