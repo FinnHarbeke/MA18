@@ -6,8 +6,8 @@ from torch.utils.data import DataLoader
 import torchvision as tv
 import pandas as pd
 
-nn_subfolder = '8.try'
-test_subfolder = '8.try'
+nn_subfolder = '9.try'
+test_subfolder = '9.try'
 
 def confusion_matrix(nn, img_dir):
     nn.train(False)
@@ -37,7 +37,7 @@ def confusion_matrix(nn, img_dir):
     count = len(dataset)
     return confusion_matrix, acc/count
 
-for i in range(21):
+for i in range(31):
     fn = 'Nets/' + nn_subfolder + '/' + str(i) + '.pth'
     nn = FingeralphabetNet()
     if torch.cuda.is_available():

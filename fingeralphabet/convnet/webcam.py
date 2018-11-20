@@ -9,15 +9,16 @@ def letter(output, count):
     returns the top count letters of an output of the net
     """
     output = [float(x) for x in output[0]]
-    
-    maxes = [-100000000 for i in range(count)] 
-    indexes = [-100000000 for i in range(count)]
+    maxes = [None for i in range(count)] 
+    indexes = [None for i in range(count)]
     for i, x in enumerate(output):
-        if x > min(maxes):
+        if None in maxes:
+            indexes[maxes.index(None)] = i
+            maxes[maxes.index(None)] = x
+        elif x > min(maxes):
             indexes[maxes.index(min(maxes))] = i
             maxes[maxes.index(min(maxes))] = x
     abc = [chr(i) for i in range(ord("A"), ord("Z")+1)] + ["SCH", "CH", "NOTHING"]
-
     # sort
     res_maxes = []
     res_indexes = []
@@ -26,7 +27,6 @@ def letter(output, count):
         res_indexes.append(indexes[maxes.index(max(maxes))])
         indexes.remove(indexes[maxes.index(max(maxes))])
         maxes.remove(max(maxes))
-
     return [abc[i] for i in res_indexes], res_maxes
 
 def webcamNN(nn):
